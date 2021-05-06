@@ -3,14 +3,18 @@ import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { MenuIcon, XIcon, ShoppingBagIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+
+import { logout } from '../../redux/reducers/user/user.actions';
 
 import Logo from '../../assets/images/keke_cook_logo.svg';
 
 import {
   MENU_HEADER_LINKS,
   USER_HEADER_MENU_LINKS,
-  SIGN_IN,
 } from '../../constants/menu.constants';
+import { SIGN_IN_BUTTON_HEADER } from '../../constants/auth.constants';
 
 import CustomLink from '../custom-link/custom-link.component.jsx';
 import Search from '../search/search.component.jsx';
@@ -20,7 +24,15 @@ function classNames(...classes) {
 }
 
 const Header = () => {
-  const currentUser = null;
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const logoutHandler = () => {
+    dispatch(logout());
+    history.push('/');
+  };
   return (
     <Disclosure as='nav' className='bg-white shadow '>
       {({ open }) => (
@@ -70,7 +82,7 @@ const Header = () => {
                     <span className='sr-only'>View notifications</span>
                     <ShoppingBagIcon className='h-6 w-6' aria-hidden='true' />
                   </button>
-                  {currentUser ? (
+                  {userInfo ? (
                     <Menu as='div' className='ml-4 relative flex-shrink-0'>
                       {({ open }) => (
                         <>
@@ -79,8 +91,8 @@ const Header = () => {
                               <span className='sr-only'>Open user menu</span>
                               <img
                                 className='h-8 w-8 rounded-full'
-                                src={currentUser && currentUser.photoURL}
-                                alt={currentUser && currentUser.displayName}
+                                src={userInfo?.photoURL}
+                                alt={userInfo?.displayName}
                               />
                             </Menu.Button>
                           </div>
@@ -120,9 +132,9 @@ const Header = () => {
                                 <CustomLink
                                   type='button'
                                   role='menuitem'
-                                  onClick={() => {}}
+                                  onClick={logoutHandler}
                                 >
-                                  Sign out
+                                  Déconnexion
                                 </CustomLink>
                               </Menu.Item>
                             </Menu.Items>
@@ -132,11 +144,11 @@ const Header = () => {
                     </Menu>
                   ) : (
                     <CustomLink
-                      to='/login'
+                      url='/login'
                       type='link-button'
                       custom='ml-5 px-4 py-2  text-base font-medium text-white bg-rose-600 hover:bg-rose-700'
                     >
-                      {SIGN_IN}
+                      {SIGN_IN_BUTTON_HEADER}
                     </CustomLink>
                   )}
                 </div>

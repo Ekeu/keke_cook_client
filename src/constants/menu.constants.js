@@ -32,4 +32,3 @@ export const USER_HEADER_MENU_LINKS = [
     url: '/buy/cart',
   },
 ];
-export const SIGN_IN = 'Connexion'
