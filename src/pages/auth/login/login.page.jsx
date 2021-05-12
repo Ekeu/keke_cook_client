@@ -31,6 +31,9 @@ const Login = ({ history }) => {
 
   const { loading, error, userInfo } = userLogin;
 
+  const roleBasedRedirect =
+    userInfo?.role === 'admin' ? '/admin/dashboard' : '/me/history';
+
   useEffect(() => {
     if (error) {
       toast(
@@ -40,10 +43,10 @@ const Login = ({ history }) => {
       );
     } else {
       if (userInfo) {
-        history.push('/');
+        history.push(roleBasedRedirect);
       }
     }
-  }, [history, userInfo, error]);
+  }, [history, userInfo, error, roleBasedRedirect]);
 
   const {
     register,

@@ -2,29 +2,33 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
 
 import FormInput from '../../../components/form-input/form-input.component.jsx';
 import CustomButton from '../../../components/custom-button/custom-button.component.jsx';
 import Notification from '../../../components/notification/notification.component.jsx';
 
+import { registerUser } from '../../../redux/reducers/user/user.actions';
+
 import {
   SIGN_UP_PAGE_FINISH_REGISTRATION,
   SIGN_IN_LINK_ON_SIGN_UP_PAGE,
   SIGN_UP_PAGE_BUTTON_SUBMIT,
-  SIGN_UP_FINISH_HEADLINE_SUCCESS_NOTIFICATION,
-  SIGN_UP_FINISH_BODY_SUCCESS_NOTIFICATION,
   SIGN_UP_FINISH_HEADLINE_ERROR_NOTIFICATION,
-  SIGN_UP_FINISH_BODY_ERROR_NOTIFICATION,
 } from '../../../constants/auth.constants';
-import { auth } from '../../../firebase/firebase';
-import { generateGravatar } from '../../../utils/functions';
 
 import Logo from '../../../assets/images/keke_cook_logo.svg';
 
 const FinishRegistration = ({ history }) => {
-  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const userRegister = useSelector((state) => state.userRegister);
+
+  const { loading, error, userInfo } = userRegister;
+
   const {
     register,
     formState: { errors },
@@ -32,52 +36,30 @@ const FinishRegistration = ({ history }) => {
   } = useForm();
 
   useEffect(() => {
-    setEmail(localStorage.getItem('userRegistrationEmail'));
-  }, []);
+    if (error) {
+      toast(
+        <Notification
+          error
+          headline={SIGN_UP_FINISH_HEADLINE_ERROR_NOTIFICATION}
+        >
+          {error}
+        </Notification>
+      );
+    } else {
+      if (userInfo) {
+        history.push('/');
+      } else {
+        setEmail(localStorage.getItem('userRegistrationEmail'));
+      }
+    }
+  }, [history, userInfo, error]);
 
   const togglePassword = () => {
     setShowPassword(!showPassword);
   };
 
   const onSubmit = handleSubmit(async ({ displayName, password }) => {
-    try {
-      setLoading(true);
-      const res = await auth.signInWithEmailLink(email, window.location.href);
-      if (res.user.emailVerified) {
-        localStorage.removeItem('userRegistrationEmail');
-        const currentUser = auth.currentUser;
-        await currentUser.updatePassword(password);
-        await currentUser.updateProfile({
-          displayName,
-          photoURL: res.user.photoURL
-            ? res.user.photoURL
-            : generateGravatar(email),
-        });
-        //const idTokenResult = await currentUser.getIdTokenResult();
-        //console.table(currentUser, idTokenResult);
-      }
-      history.push('/');
-      toast(
-        <Notification
-          success
-          headline={SIGN_UP_FINISH_HEADLINE_SUCCESS_NOTIFICATION}
-        >
-          {SIGN_UP_FINISH_BODY_SUCCESS_NOTIFICATION}
-        </Notification>
-      );
-      setLoading(false);
-    } catch (err) {
-      console.log(err);
-      toast(
-        <Notification
-          error
-          headline={SIGN_UP_FINISH_HEADLINE_ERROR_NOTIFICATION}
-        >
-          {SIGN_UP_FINISH_BODY_ERROR_NOTIFICATION}
-        </Notification>
-      );
-      setLoading(false);
-    }
+    dispatch(registerUser(displayName, password, email));
   });
 
   return (

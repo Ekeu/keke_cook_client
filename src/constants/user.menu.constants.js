@@ -1,0 +1,6 @@
+export const HISTORY_HEADLINE = 'Historique'
+export const HISTORY_DESCRIPTION = 'Historique de vos achats sur Keke Cook'
+export const SET_NEW_PASSWORD_HEADLINE = 'Définir un nouveau mot de passe'
+export const SET_NEW_PASSWORD_DESCRIPTION = 'Choisissez un mot de passe unique pour protéger votre compte'
+export const WISHLIST_HEADLINE = 'Liste de souhaits'
+export const WISHLIST_DESCRIPTION = 'Liste de vos articles favoris'

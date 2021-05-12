@@ -21,6 +21,9 @@ module.exports = {
         'cool-gray': colors.coolGray,
         'blue-gray': colors.blueGray,
       },
+      screens: {
+        'xs': '520px',
+      },
     },
   },
   variants: {
@@ -29,5 +32,6 @@ module.exports = {
   plugins: [
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
   ],
 };
