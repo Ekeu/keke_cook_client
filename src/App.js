@@ -17,6 +17,7 @@ import History from './pages/user/history.page.jsx';
 import Password from './pages/user/password.page.jsx';
 import WishList from './pages/user/wish-list.page.jsx';
 import AdminDashboard from './pages/admin/dashboard.page.jsx';
+import Category from './pages/admin/category/category.page.jsx';
 
 
 import Header from './components/header/header.component';
@@ -52,10 +53,11 @@ const App = () => {
         <Route exact path='/register' component={Register} />
         <Route exact path='/register/finish' component={FinishRegistration} />
         <Route exact path='/password/new' component={ForgotPassword} />
-        <UserRoute exact path='/me/history' component={History} />
+        <UserRoute exact path='/me/account' component={History} />
         <UserRoute exact path='/me/password/update' component={Password} />
         <UserRoute exact path='/me/wishlist' component={WishList} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
+        <AdminRoute exact path='/admin/products/categories' component={Category} />
       </Switch>
     </>
   );

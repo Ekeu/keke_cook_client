@@ -13,7 +13,7 @@ import { Link, useLocation } from 'react-router-dom';
 import Logo from '../../assets/images/keke_cook_white_logo.svg';
 
 const defaultNavigation = [
-  { name: 'Historique', href: '/me/history', icon: ClockIcon },
+  { name: 'Historique', href: '/me/account', icon: ClockIcon },
   {
     name: 'Mot de passe',
     href: '/me/password/update',
@@ -26,11 +26,27 @@ const defaultNavigation = [
   },
 ];
 
+const defaultNavigationColors = {
+  sideNavPrimaryBgColor: 'bg-rose-700',
+  sideNavActiveLinkBgColor: 'bg-rose-800',
+  sideNavActiveLinkTextColor: 'text-white',
+  sideNavLinkTextColor: 'text-rose-100',
+  sideNavLinkTextHoverColor: 'bg-rose-600',
+  sideNavLinkIconColor: 'text-rose-300',
+  sideMobileNavButtonBgColor: 'bg-rose-800',
+  sideMobileNavButtonTextColor: ' text-rose-300',
+  sideMobileNavButtonBorderColor: 'border-rose-200',
+};
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-const UserNav = ({ children, navigation = defaultNavigation }) => {
+const UserNav = ({
+  children,
+  navigation = defaultNavigation,
+  navigationColors = defaultNavigationColors,
+}) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
 
@@ -64,7 +80,9 @@ const UserNav = ({ children, navigation = defaultNavigation }) => {
             leaveFrom='translate-x-0'
             leaveTo='-translate-x-full'
           >
-            <div className='relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-rose-700'>
+            <div
+              className={`relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 ${navigationColors.sideNavPrimaryBgColor}`}
+            >
               <Transition.Child
                 as={Fragment}
                 enter='ease-in-out duration-300'
@@ -96,13 +114,13 @@ const UserNav = ({ children, navigation = defaultNavigation }) => {
                       to={item.href}
                       className={classNames(
                         location.pathname === item.href
-                          ? 'bg-rose-800 text-white'
-                          : 'text-rose-100 hover:bg-rose-600',
+                          ? `${navigationColors.sideNavActiveLinkBgColor} ${navigationColors.sideNavActiveLinkTextColor}`
+                          : `${navigationColors.sideNavLinkTextColor} hover:${navigationColors.sideNavLinkTextHoverColor}`,
                         'group flex items-center px-2 py-2 text-base font-medium rounded-md'
                       )}
                     >
                       <item.icon
-                        className='mr-4 h-6 w-6 text-rose-300'
+                        className={`mr-4 h-6 w-6 ${navigationColors.sideNavLinkIconColor}`}
                         aria-hidden='true'
                       />
                       {item.name}
@@ -119,9 +137,10 @@ const UserNav = ({ children, navigation = defaultNavigation }) => {
       </Transition.Root>
 
       {/* Static sidebar for desktop */}
-      <div className='hidden bg-rose-700 md:flex md:flex-shrink-0'>
+      <div
+        className={`hidden ${navigationColors.sideNavPrimaryBgColor} md:flex md:flex-shrink-0`}
+      >
         <div className='flex flex-col w-64'>
-          {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className='flex flex-col flex-grow pt-5 pb-4 overflow-y-auto'>
             <div className='flex-1 flex flex-col'>
               <nav className='flex-1 px-2 space-y-1 font-hind'>
@@ -131,13 +150,13 @@ const UserNav = ({ children, navigation = defaultNavigation }) => {
                     to={item.href}
                     className={classNames(
                       location.pathname === item.href
-                        ? 'bg-rose-800 text-white'
-                        : 'text-rose-100 hover:bg-rose-600',
+                        ? `${navigationColors.sideNavActiveLinkBgColor} ${navigationColors.sideNavActiveLinkTextColor}`
+                        : `${navigationColors.sideNavLinkTextColor} hover:${navigationColors.sideNavLinkTextHoverColor}`,
                       'group flex items-center px-6 py-2 text-sm font-medium rounded-md'
                     )}
                   >
                     <item.icon
-                      className='mr-3 h-6 w-6 text-rose-300'
+                      className={`mr-3 h-6 w-6 ${navigationColors.sideNavLinkIconColor}`}
                       aria-hidden='true'
                     />
                     {item.name}
@@ -149,10 +168,10 @@ const UserNav = ({ children, navigation = defaultNavigation }) => {
         </div>
       </div>
       <div className='flex flex-col md:flex-row w-0 flex-1 overflow-hidden'>
-        <div className='relative z-10 flex-shrink-0 flex h-16 bg-rose-800 shadow'>
+        <div className={`relative z-10 flex-shrink-0 flex h-16 ${navigationColors.sideMobileNavButtonBgColor} shadow`}>
           <button
             type='button'
-            className='px-4 border-r border-rose-200 text-rose-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-rose-500 md:hidden'
+            className={`px-4 border-r ${navigationColors.sideMobileNavButtonBorderColor} ${navigationColors.sideMobileNavButtonTextColor} focus:outline-none focus:ring-2 focus:ring-inset focus:ring-rose-500 md:hidden`}
             onClick={() => setSidebarOpen(true)}
           >
             <span className='sr-only'>Open sidebar</span>

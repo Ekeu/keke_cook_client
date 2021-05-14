@@ -32,7 +32,7 @@ const Login = ({ history }) => {
   const { loading, error, userInfo } = userLogin;
 
   const roleBasedRedirect =
-    userInfo?.role === 'admin' ? '/admin/dashboard' : '/me/history';
+    userInfo?.role === 'admin' ? '/admin/dashboard' : '/me/account';
 
   useEffect(() => {
     if (error) {
