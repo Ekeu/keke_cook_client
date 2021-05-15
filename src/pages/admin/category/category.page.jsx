@@ -8,12 +8,23 @@ import UserNav from '../../../components/nav/user.nav.component';
 import UserNavChildrenLayout from '../../../components/nav/user.nav.children.layout.component';
 import Notification from '../../../components/notification/notification.component.jsx';
 import Modal from '../../../components/modal/modal.component';
+import Loader from '../../../components/loader/loader.component';
 import CategoryComponent from '../../../components/category/category.component';
 import CategoryForm from '../../../components/category-form/category-form.component';
+import CategoryUpdateForm from '../../../components/category-update-form/category-update-form.component';
 import DeleteAlert from '../../../components/delete-alert/delete-alert.component';
 
-import { getCategories } from '../../../redux/reducers/category/category.actions';
-import { CATEGORY_CREATE_RESET } from '../../../redux/reducers/category/category.types';
+import {
+  getCategory,
+  getCategories,
+  deleteCategory,
+} from '../../../redux/reducers/category/category.actions';
+import {
+  CATEGORY_CREATE_RESET,
+  CATEGORY_DELETE_RESET,
+  CATEGORY_DETAILS_RESET,
+  CATEGORY_UPDATE_RESET
+} from '../../../redux/reducers/category/category.types';
 
 import {
   ADMIN_NAVIGATION_COLORS,
@@ -36,24 +47,39 @@ const options = [
 const Category = ({ history }) => {
   const dispatch = useDispatch();
   const categoryList = useSelector((state) => state.categoryList);
-  const { categories } = categoryList;
+  const { loading, error, categories } = categoryList;
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+  const categoryDelete = useSelector((state) => state.categoryDelete);
+  const {
+    error: errorDelete,
+    success: successDelete,
+    loading: loadingDelete,
+  } = categoryDelete;
   const categoryCreate = useSelector((state) => state.categoryCreate);
   const {
     error: errorCreate,
     success: successCreate,
     category: createdCategory,
   } = categoryCreate;
+  const categoryUpdate = useSelector((state) => state.categoryUpdate);
+  const {
+    error: errorUpdate,
+    success: successUpdate,
+    category: updatedCategory,
+  } = categoryUpdate;
 
   const [categoryToDelete, setCategoryToDelete] = useState('');
   const [open, setOpen] = useState(false);
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
+  const [openUpdate, setOpenUpdate] = useState(false);
 
   const cancelButtonRef = useRef();
 
   useEffect(() => {
     dispatch({ type: CATEGORY_CREATE_RESET });
+    dispatch({ type: CATEGORY_DELETE_RESET });
+    dispatch({ type: CATEGORY_DETAILS_RESET });
     dispatch(getCategories());
     if (userInfo && userInfo.role !== 'admin') {
       history.push('/');
@@ -66,19 +92,65 @@ const Category = ({ history }) => {
       );
       setOpen(false);
     }
+    if (successUpdate) {
+      toast(
+        <Notification success headline='Mise à jour réussie'>
+          La mise à jour de la catégorie {updatedCategory?.name} à réussie
+        </Notification>
+      );
+      dispatch({ type: CATEGORY_UPDATE_RESET });
+      setOpenUpdate(false);
+    }
+    if (successDelete) {
+      toast(
+        <Notification success headline='Suppréssion réussie'>
+          La catégorie à été supprimée avec succès
+        </Notification>
+      );
+      setOpenDeleteAlert(false);
+    }
     if (errorCreate) {
       toast(
-        <Notification error headline='Erreur!'>
-          Une erreur s'est produite. Veuillez réessayez.
+        <Notification error headline='Erreur de création'>
+          {errorCreate}
         </Notification>
       );
       setOpen(false);
+    }
+    if (errorUpdate) {
+      toast(
+        <Notification error headline='Erreur de mise à jour'>
+          {errorUpdate}
+        </Notification>
+      );
+      setOpenUpdate(false);
+    }
+    if (errorDelete) {
+      toast(
+        <Notification error headline='Erreur de suppression'>
+          {errorDelete}
+        </Notification>
+      );
+      setOpenDeleteAlert(false)
+    }
+    if (error) {
+      toast(
+        <Notification error headline='Erreur de chargement'>
+          {error}
+        </Notification>
+      );
     }
   }, [
     dispatch,
     createdCategory,
     successCreate,
+    successUpdate,
+    successDelete,
+    errorDelete,
     errorCreate,
+    errorUpdate,
+    updatedCategory,
+    error,
     history,
     userInfo,
   ]);
@@ -87,11 +159,17 @@ const Category = ({ history }) => {
     setOpenDeleteAlert(true);
     setCategoryToDelete(slug);
   };
+  const loadCategoryToUpdate = (slug) => {
+    dispatch(getCategory(slug));
+    setOpenUpdate(true);
+  };
   const cancselAlertAction = () => {
     setOpenDeleteAlert(false);
     setCategoryToDelete('');
   };
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    dispatch(deleteCategory(categoryToDelete));
+  };
 
   return (
     <>
@@ -104,15 +182,24 @@ const Category = ({ history }) => {
           description={CATEGORY_DESCRIPTION}
         >
           <div className='flex flex-col justify-center py-12'>
+            {loading && (
+              <div className='mt-2 sm:mx-auto sm:w-full sm:max-w-md'>
+                <div className='py-8 px-4 flex justify-center sm:px-10'>
+                  <Loader height='h-24' width='h-24' />
+                </div>
+              </div>
+            )}
             {categories?.length > 0 && (
               <div className='mt-1'>
                 <ul className='grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4 mt-3'>
                   {categories.map((category) => (
                     <CategoryComponent
+                      key={category._id}
                       category={category}
                       options={options}
                       bgColor={'bg-rose-500'}
-                      menuDeleteOptionAction={() => setOpenDeleteAlert(true)}
+                      menuDeleteOptionAction={deleteOptionAction}
+                      menuUpdateOptionAction={loadCategoryToUpdate}
                     />
                   ))}
                   <li className='relative col-span-1 my-auto rounded-md'>
@@ -128,7 +215,7 @@ const Category = ({ history }) => {
                 </ul>
               </div>
             )}
-            {categories?.length <= 0 && (
+            {!loading && categories.length <= 0 && (
               <>
                 <div className='sm:mx-auto sm:w-full sm:max-w-md'>
                   <p className='text-center text-sm font-hind text-blue-gray-600'>
@@ -169,6 +256,18 @@ const Category = ({ history }) => {
         />
       </Modal>
       <Modal
+        open={openUpdate}
+        backgroundColor={'bg-blue-gray-500'}
+        backgroundOpacity={'bg-opacity-60'}
+        initialFocusRef={cancelButtonRef}
+        onClose={setOpenUpdate}
+      >
+        <CategoryUpdateForm
+          cancel={() => setOpenUpdate(false)}
+          cancelButtonRef={cancelButtonRef}
+        />
+      </Modal>
+      <Modal
         open={openDeleteAlert}
         backgroundColor={'bg-blue-gray-500'}
         backgroundOpacity={'bg-opacity-60'}
@@ -176,10 +275,11 @@ const Category = ({ history }) => {
         onClose={setOpenDeleteAlert}
       >
         <DeleteAlert
-          cancel={() => setOpenDeleteAlert(false)}
+          cancel={cancselAlertAction}
           cancelButtonRef={cancelButtonRef}
           deleteAction={handleDelete}
           headline={"Suppression d'une Catégorie"}
+          loadingDelete={loadingDelete}
         >
           Êtes vous sûr de vouloir supprimer cette ccatégorie? Toutes les
           données liées à cette catégorie seront définitivement supprimées de

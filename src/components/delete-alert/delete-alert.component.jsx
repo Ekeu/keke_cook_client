@@ -9,6 +9,7 @@ const DeleteAlert = ({
   children,
   deleteAction,
   cancel,
+  loadingDelete,
   cancelButtonRef,
 }) => {
   return (
@@ -36,6 +37,9 @@ const DeleteAlert = ({
         <CustomButton
           type='button'
           onClick={deleteAction}
+          loading={loadingDelete}
+          loaderHeight={'h-4'}
+          loaderWidth={'h-4'}
           customStyles='border border-transparent text-white bg-rose-600 hover:bg-rose-700 sm:ml-3 sm:w-auto sm:text-sm'
         >
           Supprimer

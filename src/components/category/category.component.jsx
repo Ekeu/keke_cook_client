@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import { Menu, Transition } from '@headlessui/react';
-import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 
@@ -8,7 +7,12 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-const Category = ({ category, menuDeleteOptionAction, menuUpdateOptionAction, bgColor }) => {
+const Category = ({
+  category,
+  menuDeleteOptionAction,
+  menuUpdateOptionAction,
+  bgColor,
+}) => {
   return (
     <>
       <li
@@ -22,12 +26,9 @@ const Category = ({ category, menuDeleteOptionAction, menuUpdateOptionAction, bg
         </div>
         <div className='flex-1 flex items-center justify-between border-t border-r border-b border-gray-200 bg-white rounded-r-md truncate'>
           <div className='flex-1 px-4 py-2 text-sm truncate'>
-            <Link
-              href='#'
-              className='text-gray-900 font-medium hover:text-gray-600'
-            >
+            <span className='text-blue-gray-900 font-medium hover:text-blue-gray-600'>
               {category.name}
-            </Link>
+            </span>
             <p className='text-gray-500'>
               {moment(category.updatedAt).format('L')}
             </p>
@@ -54,36 +55,40 @@ const Category = ({ category, menuDeleteOptionAction, menuUpdateOptionAction, bg
                     className='z-10 mx-3 origin-top-right absolute right-10 top-3 w-48 mt-1 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'
                   >
                     <div className='py-1'>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <span
-                              onClick={menuUpdateOptionAction}
-                              className={classNames(
-                                active
-                                  ? 'bg-blue-gray-100 text-blue-gray-800'
-                                  : 'text-blue-gray-700',
-                                'block px-4 py-2 text-sm cursor-pointer'
-                              )}
-                            >
-                              Modifier
-                            </span>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <span
-                              onClick={menuDeleteOptionAction}
-                              className={classNames(
-                                active
-                                  ? 'bg-blue-gray-100 text-blue-gray-800'
-                                  : 'text-blue-gray-700',
-                                'block px-4 py-2 text-sm cursor-pointer'
-                              )}
-                            >
-                              Supprimer
-                            </span>
-                          )}
-                        </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <span
+                            onClick={() =>
+                              menuUpdateOptionAction(category.slug)
+                            }
+                            className={classNames(
+                              active
+                                ? 'bg-blue-gray-100 text-blue-gray-800'
+                                : 'text-blue-gray-700',
+                              'block px-4 py-2 text-sm cursor-pointer focus:outline-none'
+                            )}
+                          >
+                            Modifier
+                          </span>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <span
+                            onClick={() =>
+                              menuDeleteOptionAction(category.slug)
+                            }
+                            className={classNames(
+                              active
+                                ? 'bg-blue-gray-100 text-blue-gray-800'
+                                : 'text-blue-gray-700',
+                              'block px-4 py-2 text-sm cursor-pointer focus:outline-none'
+                            )}
+                          >
+                            Supprimer
+                          </span>
+                        )}
+                      </Menu.Item>
                     </div>
                   </Menu.Items>
                 </Transition>

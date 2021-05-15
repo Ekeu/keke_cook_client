@@ -20,7 +20,7 @@ import {
 export const getCategories = () => async (dispatch) => {
   try {
     dispatch({ type: CATEGORY_LIST_REQUEST });
-    const {data} = await axios.get(`/api/v1/categories/`);
+    const { data } = await axios.get(`/api/v1/categories/`);
     dispatch({
       type: CATEGORY_LIST_SUCCESS,
       payload: data,
@@ -38,30 +38,28 @@ export const getCategories = () => async (dispatch) => {
 
 export const getCategory = (slug) => async (dispatch) => {
   try {
-    //dispatch({ type: FOOD_DETAILS_REQUEST });
-    const response = await axios.get(`/api/v1/categories/${slug}`);
-    /* dispatch({
-      type: FOOD_DETAILS_SUCCESS,
+    dispatch({ type: CATEGORY_DETAILS_REQUEST });
+    const { data } = await axios.get(`/api/v1/categories/${slug}`);
+    dispatch({
+      type: CATEGORY_DETAILS_SUCCESS,
       payload: data,
-    }); */
+    });
   } catch (error) {
-    console.log(error);
-    /* dispatch({
-      type: FOOD_DETAILS_FAIL,
+    dispatch({
+      type: CATEGORY_DETAILS_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
-    }); */
+    });
   }
 };
 
 export const deleteCategory = (slug) => async (dispatch, getState) => {
   try {
-    /* dispatch({
-      type: FOOD_DELETE_REQUEST,
-    }); */
-
+    dispatch({
+      type: CATEGORY_DELETE_REQUEST,
+    });
     const {
       userLogin: { userInfo },
     } = getState();
@@ -70,21 +68,18 @@ export const deleteCategory = (slug) => async (dispatch, getState) => {
         Authorization: userInfo.token,
       },
     };
-
     await axios.delete(`/api/v1/categories/${slug}`, config);
-
-    /* dispatch({
-      type: FOOD_DELETE_SUCCESS,
-    }); */
+    dispatch({
+      type: CATEGORY_DELETE_SUCCESS,
+    });
   } catch (error) {
-    console.log(error);
-    /* dispatch({
-      type: FOOD_DELETE_FAIL,
+    dispatch({
+      type: CATEGORY_DELETE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
-    }); */
+    });
   }
 };
 
@@ -121,14 +116,14 @@ export const createCategory = (name) => async (dispatch, getState) => {
   }
 };
 
-export const updateCategory = (slug, category) => async (
+export const updateCategory = (slug, name) => async (
   dispatch,
   getState
 ) => {
   try {
-    /* dispatch({
-      type: FOOD_UPDATE_REQUEST,
-    }); */
+    dispatch({
+      type: CATEGORY_UPDATE_REQUEST,
+    });
 
     const {
       userLogin: { userInfo },
@@ -139,24 +134,23 @@ export const updateCategory = (slug, category) => async (
         Authorization: userInfo.token,
       },
     };
-    const response = await axios.put(
+    const { data } = await axios.put(
       `/api/v1/categories/${slug}`,
-      category,
+      {name},
       config
     );
 
-    /* dispatch({
-      type: FOOD_UPDATE_SUCCESS,
+    dispatch({
+      type: CATEGORY_UPDATE_SUCCESS,
       payload: data,
-    }); */
+    });
   } catch (error) {
-    console.log(error);
-    /* dispatch({
-      type: FOOD_UPDATE_FAIL,
+    dispatch({
+      type: CATEGORY_UPDATE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
           : error.message,
-    }); */
+    });
   }
 };
