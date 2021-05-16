@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { MenuIcon } from '@heroicons/react/outline';
-import { Dialog } from '@headlessui/react';
+import { MenuAlt2Icon } from '@heroicons/react/outline';
 import { useForm } from 'react-hook-form';
 
 import FormInput from '../form-input/form-input.component.jsx';
 import CustomButton from '../custom-button/custom-button.component.jsx';
+import Select from '../select/select.component';
 
-import { createCategory } from '../../redux/reducers/category/category.actions';
+import { createSubcategory } from '../../redux/reducers/subcategory/subcategory.actions';
 
-const CategoryForm = ({ cancel, cancelButtonRef }) => {
+const SubcategoryForm = ({ cancel, cancelButtonRef }) => {
   const dispatch = useDispatch();
-  const categoryCreate = useSelector((state) => state.categoryCreate);
-  const { loading: loadingCreate } = categoryCreate;
+  const subcategoryCreate = useSelector((state) => state.subcategoryCreate);
+  const { loading: loadingCreate } = subcategoryCreate;
+  const categoryList = useSelector((state) => state.categoryList);
+  const { categories } = categoryList;
+  const [selected, setSelected] = useState(categories[0]);
   const {
     register,
     setValue,
@@ -20,9 +23,9 @@ const CategoryForm = ({ cancel, cancelButtonRef }) => {
     handleSubmit,
   } = useForm();
 
-  const onSubmit = handleSubmit(async ({ categoryName }) => {
-    dispatch(createCategory(categoryName));
-    setValue('categoryName', '');
+  const onSubmit = handleSubmit(async ({ subcategoryName }) => {
+    dispatch(createSubcategory(subcategoryName, selected._id));
+    setValue('subcategoryName', '');
   });
 
   return (
@@ -30,38 +33,42 @@ const CategoryForm = ({ cancel, cancelButtonRef }) => {
       <form onSubmit={onSubmit}>
         <div>
           <div className='mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-gray-100'>
-            <MenuIcon
+            <MenuAlt2Icon
               className='h-6 w-6 text-blue-gray-600'
               aria-hidden='true'
             />
           </div>
           <div className='mt-3 text-center sm:mt-5'>
-            <Dialog.Title
-              as='h3'
-              className='text-lg leading-6 font-hind text-tight font-medium text-blue-gray-800'
-            >
-              Saisissez le nom de la catégorie
-            </Dialog.Title>
+            <Select
+              options={categories}
+              value={selected}
+              onChange={setSelected}
+              label={'Catégories'}
+            />
             <div className='mt-4'>
               <FormInput
-                id='categoryName'
-                name='categoryName'
+                id='subcategoryName'
+                name='subcategoryName'
+                label='subcategoryName'
+                labelText='Nom de la sous catégorie'
                 type='text'
                 autoComplete='off'
-                register={register('categoryName', {
-                  required: 'Saisissez le nom de la catégorie',
+                register={register('subcategoryName', {
+                  required: 'Saisissez le nom de la sous catégorie',
                   maxLength: {
                     value: 32,
-                    message: 'Le nom de la catégorie est trop long (Max: 32)',
+                    message:
+                      'Le nom de la sous catégorie est trop long (Max: 32)',
                   },
                   minLength: {
                     value: 3,
-                    message: 'Le nom de la catégorie est trop court (Min: 3)',
+                    message:
+                      'Le nom de la sous catégorie est trop court (Min: 3)',
                   },
                 })}
-                placeholder='Sweet Cake'
+                placeholder='Brownie'
                 autoFocus
-                error={errors.categoryName?.message}
+                error={errors.subcategoryName?.message}
               />
             </div>
           </div>
@@ -90,4 +97,4 @@ const CategoryForm = ({ cancel, cancelButtonRef }) => {
   );
 };
 
-export default CategoryForm;
+export default SubcategoryForm;

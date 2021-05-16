@@ -31,7 +31,7 @@ export const ADMIN_NAVIGATION = [
   },
   {
     name: 'Sous Catégories',
-    href: '/admin/products/scategories',
+    href: '/admin/products/subcategories',
     icon: MenuAlt2Icon,
   },
   {
@@ -59,4 +59,6 @@ export const ADMIN_NAVIGATION_COLORS = {
 };
 
 export const CATEGORY_HEADLINE = 'Catégories'
-export const CATEGORY_DESCRIPTION = 'Créer et modifier vos différentes catégories'
+export const CATEGORY_DESCRIPTION = 'Créer, modifier et supprimer vos différentes catégories'
+export const SUBCATEGORY_HEADLINE = 'Sous Catégories'
+export const SUBCATEGORY_DESCRIPTION = 'Créer, modifier et supprimer vos différentes sous catégories'

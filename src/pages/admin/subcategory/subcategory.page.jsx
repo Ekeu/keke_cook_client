@@ -10,26 +10,27 @@ import Notification from '../../../components/notification/notification.componen
 import Modal from '../../../components/modal/modal.component';
 import Loader from '../../../components/loader/loader.component';
 import CategoryComponent from '../../../components/category/category.component';
-import CategoryForm from '../../../components/category-form/category-form.component';
-import CategoryUpdateForm from '../../../components/category-update-form/category-update-form.component';
+import SubcategoryForm from '../../../components/subcategory-form/subcategory-form.component';
 import DeleteAlert from '../../../components/delete-alert/delete-alert.component';
+import SubcategoryUpdateForm from '../../../components/subcategory-update-form/subcategory-update-form.component';
 
+import { getCategories } from '../../../redux/reducers/category/category.actions';
 import {
-  getCategory,
-  getCategories,
-  deleteCategory,
-} from '../../../redux/reducers/category/category.actions';
+  getSubcategory,
+  getSubCategories,
+  deleteSubcategory,
+} from '../../../redux/reducers/subcategory/subcategory.actions';
 import {
-  CATEGORY_CREATE_RESET,
-  CATEGORY_DELETE_RESET,
-  CATEGORY_DETAILS_RESET,
-  CATEGORY_UPDATE_RESET,
-} from '../../../redux/reducers/category/category.types';
+  SUBCATEGORY_CREATE_RESET,
+  SUBCATEGORY_DELETE_RESET,
+  SUBCATEGORY_DETAILS_RESET,
+  SUBCATEGORY_UPDATE_RESET,
+} from '../../../redux/reducers/subcategory/subcategory.types';
 
 import {
   ADMIN_NAVIGATION,
-  CATEGORY_HEADLINE,
-  CATEGORY_DESCRIPTION,
+  SUBCATEGORY_HEADLINE,
+  SUBCATEGORY_DESCRIPTION,
 } from '../../../constants/admin.menu.constants';
 
 const options = [
@@ -45,30 +46,30 @@ const options = [
 
 const Category = ({ history }) => {
   const dispatch = useDispatch();
-  const categoryList = useSelector((state) => state.categoryList);
-  const { loading, error, categories } = categoryList;
+  const subcategoryList = useSelector((state) => state.subcategoryList);
+  const { loading, error, subcategories } = subcategoryList;
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-  const categoryDelete = useSelector((state) => state.categoryDelete);
+  const subcategoryDelete = useSelector((state) => state.subcategoryDelete);
   const {
+    loading: loadingDelete,
     error: errorDelete,
     success: successDelete,
-    loading: loadingDelete,
-  } = categoryDelete;
-  const categoryCreate = useSelector((state) => state.categoryCreate);
+  } = subcategoryDelete;
+  const subcategoryCreate = useSelector((state) => state.subcategoryCreate);
   const {
     error: errorCreate,
     success: successCreate,
-    category: createdCategory,
-  } = categoryCreate;
-  const categoryUpdate = useSelector((state) => state.categoryUpdate);
+    subcategory: createdSubcategory,
+  } = subcategoryCreate;
+  const subcategoryUpdate = useSelector((state) => state.subcategoryUpdate);
   const {
     error: errorUpdate,
     success: successUpdate,
-    category: updatedCategory,
-  } = categoryUpdate;
+    subcategory: updatedSubCategory,
+  } = subcategoryUpdate;
 
-  const [categoryToDelete, setCategoryToDelete] = useState('');
+  const [subCategoryToDelete, setSubCategoryToDelete] = useState('');
   const [open, setOpen] = useState(false);
   const [openDeleteAlert, setOpenDeleteAlert] = useState(false);
   const [openUpdate, setOpenUpdate] = useState(false);
@@ -76,17 +77,18 @@ const Category = ({ history }) => {
   const cancelButtonRef = useRef();
 
   useEffect(() => {
-    dispatch({ type: CATEGORY_CREATE_RESET });
-    dispatch({ type: CATEGORY_DELETE_RESET });
-    dispatch({ type: CATEGORY_DETAILS_RESET });
+    dispatch({ type: SUBCATEGORY_CREATE_RESET });
+    dispatch({ type: SUBCATEGORY_DELETE_RESET });
+    dispatch({ type: SUBCATEGORY_DETAILS_RESET });
     dispatch(getCategories());
+    dispatch(getSubCategories());
     if (userInfo && userInfo.role !== 'admin') {
       history.push('/');
     }
     if (successCreate) {
       toast(
         <Notification success headline='Création réussie'>
-          La création de la catégorie {createdCategory.name} à réussie
+          La création de la sous catégorie {createdSubcategory?.name} à réussie
         </Notification>
       );
       setOpen(false);
@@ -94,16 +96,16 @@ const Category = ({ history }) => {
     if (successUpdate) {
       toast(
         <Notification success headline='Mise à jour réussie'>
-          La mise à jour de la catégorie {updatedCategory?.name} à réussie
+          La mise à jour de la catégorie {updatedSubCategory?.name} à réussie
         </Notification>
       );
-      dispatch({ type: CATEGORY_UPDATE_RESET });
+      dispatch({ type: SUBCATEGORY_UPDATE_RESET });
       setOpenUpdate(false);
     }
     if (successDelete) {
       toast(
         <Notification success headline='Suppréssion réussie'>
-          La catégorie à été supprimée avec succès
+          La sous catégorie à été supprimée avec succès
         </Notification>
       );
       setOpenDeleteAlert(false);
@@ -141,14 +143,14 @@ const Category = ({ history }) => {
     }
   }, [
     dispatch,
-    createdCategory,
+    createdSubcategory,
     successCreate,
     successUpdate,
     successDelete,
     errorDelete,
     errorCreate,
     errorUpdate,
-    updatedCategory,
+    updatedSubCategory,
     error,
     history,
     userInfo,
@@ -156,26 +158,26 @@ const Category = ({ history }) => {
 
   const deleteOptionAction = (slug) => {
     setOpenDeleteAlert(true);
-    setCategoryToDelete(slug);
+    setSubCategoryToDelete(slug);
   };
-  const loadCategoryToUpdate = (slug) => {
-    dispatch(getCategory(slug));
+  const loadSubcategoryToUpdate = (slug) => {
+    dispatch(getSubcategory(slug));
     setOpenUpdate(true);
   };
   const cancelAlertAction = () => {
     setOpenDeleteAlert(false);
-    setCategoryToDelete('');
+    setSubCategoryToDelete('');
   };
   const handleDelete = () => {
-    dispatch(deleteCategory(categoryToDelete));
+    dispatch(deleteSubcategory(subCategoryToDelete));
   };
 
   return (
     <>
       <UserNav navigation={ADMIN_NAVIGATION}>
         <UserNavChildrenLayout
-          headline={CATEGORY_HEADLINE}
-          description={CATEGORY_DESCRIPTION}
+          headline={SUBCATEGORY_HEADLINE}
+          description={SUBCATEGORY_DESCRIPTION}
         >
           <div className='flex flex-col justify-center py-12'>
             {loading && (
@@ -185,33 +187,31 @@ const Category = ({ history }) => {
                 </div>
               </div>
             )}
-            {categories?.length > 0 && (
+            {subcategories?.length > 0 && (
               <div className='mt-1'>
-                <ul className='grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4 mt-3'>
-                  {categories.map((category) => (
-                    <CategoryComponent
-                      key={category._id}
-                      category={category}
-                      options={options}
-                      bgColor={'bg-rose-500'}
-                      menuDeleteOptionAction={deleteOptionAction}
-                      menuUpdateOptionAction={loadCategoryToUpdate}
-                    />
-                  ))}
-                  <li className='relative col-span-1 my-auto rounded-md'>
-                    <button
-                      type='button'
-                      onClick={() => setOpen(true)}
-                      className='bg-rose-600 p-1 rounded-full items-center justify-center text-white hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500'
-                    >
-                      <PlusIconOutline className='h-6 w-6' aria-hidden='true' />
-                      <span className='sr-only'>Ajouter une catégorie</span>
-                    </button>
-                  </li>
-                </ul>
+                {subcategories.map((subcategory) => (
+                  <span key={subcategory.category}>
+                    <h2 className='text-blue-gray-800 text-xs font-medium font-hind uppercase tracking-wide'>
+                      {subcategory.category}
+                    </h2>
+                    <ul className='grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4 my-3'>
+                      {subcategory.subcategories.map((subcategory) => (
+                        <CategoryComponent
+                          key={subcategory._id}
+                          category={subcategory}
+                          options={options}
+                          bgColor={'bg-rose-500'}
+                          menuDeleteOptionAction={deleteOptionAction}
+                          menuUpdateOptionAction={loadSubcategoryToUpdate}
+                        />
+                      ))}
+                    </ul>
+                  </span>
+                ))}
               </div>
             )}
-            {!loading && categories.length <= 0 && (
+
+            {!loading && subcategories.length <= 0 ? (
               <>
                 <div className='sm:mx-auto sm:w-full sm:max-w-md'>
                   <p className='text-center text-sm font-hind text-blue-gray-600'>
@@ -230,11 +230,26 @@ const Category = ({ history }) => {
                         className='h-12 w-12'
                         aria-hidden='true'
                       />
-                      <span className='sr-only'>Ajouter une catégorie</span>
+                      <span className='sr-only'>
+                        Ajouter une sous catégorie
+                      </span>
                     </button>
                   </div>
                 </div>
               </>
+            ) : (
+              <div className='mt-2 sm:mx-auto sm:w-full sm:max-w-md'>
+                <div className='py-8 px-4 flex justify-center sm:px-10'>
+                  <button
+                    type='button'
+                    onClick={() => setOpen(true)}
+                    className='bg-rose-600 p-1 rounded-full items-center justify-center text-white hover:bg-rose-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500'
+                  >
+                    <PlusIconOutline className='h-12 w-12' aria-hidden='true' />
+                    <span className='sr-only'>Ajouter une sous catégorie</span>
+                  </button>
+                </div>
+              </div>
             )}
           </div>
         </UserNavChildrenLayout>
@@ -246,7 +261,7 @@ const Category = ({ history }) => {
         initialFocusRef={cancelButtonRef}
         onClose={setOpen}
       >
-        <CategoryForm
+        <SubcategoryForm
           cancel={() => setOpen(false)}
           cancelButtonRef={cancelButtonRef}
         />
@@ -258,7 +273,7 @@ const Category = ({ history }) => {
         initialFocusRef={cancelButtonRef}
         onClose={setOpenUpdate}
       >
-        <CategoryUpdateForm
+        <SubcategoryUpdateForm
           cancel={() => setOpenUpdate(false)}
           cancelButtonRef={cancelButtonRef}
         />
@@ -274,12 +289,12 @@ const Category = ({ history }) => {
           cancel={cancelAlertAction}
           cancelButtonRef={cancelButtonRef}
           deleteAction={handleDelete}
-          headline={"Suppression d'une catégorie"}
+          headline={"Suppression d'une sous catégorie"}
           loadingDelete={loadingDelete}
         >
-          Êtes vous sûr de vouloir supprimer cette catégorie? Toutes les données
-          liées à cette catégorie seront définitivement supprimées de nos
-          servveurs. Cette action est irreversible.
+          Êtes vous sûr de vouloir supprimer cette sous ccatégorie? Toutes les
+          données liées à cette sous catégorie seront définitivement supprimées
+          de nos servveurs. Cette action est irreversible.
         </DeleteAlert>
       </Modal>
     </>
