@@ -11,8 +11,7 @@ import { logout } from '../../redux/reducers/user/user.actions';
 import Logo from '../../assets/images/keke_cook_logo.svg';
 
 import {
-  MENU_HEADER_LINKS,
-  USER_HEADER_MENU_LINKS,
+  MENU_HEADER_LINKS
 } from '../../constants/menu.constants';
 import { SIGN_IN_BUTTON_HEADER } from '../../constants/auth.constants';
 
@@ -110,24 +109,36 @@ const Header = () => {
                               static
                               className='z-20 origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none'
                             >
-                              {USER_HEADER_MENU_LINKS.map((link) => {
-                                const { id, text, url } = link;
-                                return (
-                                  <Menu.Item key={id}>
-                                    {({ active }) => (
-                                      <Link
-                                        to={url}
-                                        className={classNames(
-                                          active ? 'bg-blue-gray-100' : '',
-                                          'block capitalize px-4 py-2 text-sm text-blue-gray-700'
-                                        )}
-                                      >
-                                        {text}
-                                      </Link>
-                                    )}
-                                  </Menu.Item>
-                                );
-                              })}
+                              {userInfo?.role === 'subscriber' && (
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <Link
+                                      to={'/me/account'}
+                                      className={classNames(
+                                        active ? 'bg-blue-gray-100' : '',
+                                        'block capitalize px-4 py-2 text-sm text-blue-gray-700'
+                                      )}
+                                    >
+                                      Mon Compte
+                                    </Link>
+                                  )}
+                                </Menu.Item>
+                              )}
+                              {userInfo?.role === 'admin' && (
+                                <Menu.Item>
+                                  {({ active }) => (
+                                    <Link
+                                      to={'/admin/dashboard'}
+                                      className={classNames(
+                                        active ? 'bg-blue-gray-100' : '',
+                                        'block capitalize px-4 py-2 text-sm text-blue-gray-700'
+                                      )}
+                                    >
+                                      Dashboard
+                                    </Link>
+                                  )}
+                                </Menu.Item>
+                              )}
                               <Menu.Item>
                                 <CustomLink
                                   type='button'

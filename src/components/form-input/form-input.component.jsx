@@ -28,7 +28,7 @@ const FormInput = forwardRef(
         {label && (
           <label
             htmlFor={label}
-            className='block text-sm font-medium text-blue-gray-700 font-hind'
+            className='block text-sm font-medium text-blue-gray-700 font-hind text-left'
           >
             {labelText}
           </label>
