@@ -11,8 +11,7 @@ import { logout } from '../../redux/reducers/user/user.actions';
 import Logo from '../../assets/images/keke_cook_logo.svg';
 
 import {
-  MENU_HEADER_LINKS,
-  USER_HEADER_MENU_LINKS,
+  MENU_HEADER_LINKS
 } from '../../constants/menu.constants';
 import { SIGN_IN_BUTTON_HEADER } from '../../constants/auth.constants';
 

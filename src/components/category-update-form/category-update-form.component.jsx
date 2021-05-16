@@ -17,7 +17,7 @@ const CategoryForm = ({ cancel, cancelButtonRef }) => {
   const categoryUpdate = useSelector((state) => state.categoryUpdate);
   const { loading: loadingUpdate } = categoryUpdate;
   const categoryDetails = useSelector((state) => state.categoryDetails);
-  const { loading, error, category } = categoryDetails;
+  const { loading, category } = categoryDetails; //TODO: Destructure error and deal with it!
   const {
     register,
     setValue,
