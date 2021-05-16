@@ -77,7 +77,7 @@ const FormInput = forwardRef(
           )}
         </div>
         {error && (
-          <p className='mt-2 text-sm text-red-600' id='error'>
+          <p className='mt-2 text-sm text-left text-red-600' id='error'>
             {error}
           </p>
         )}

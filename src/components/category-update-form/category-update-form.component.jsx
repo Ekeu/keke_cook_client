@@ -12,7 +12,7 @@ import { updateCategory } from '../../redux/reducers/category/category.actions';
 
 import { CATEGORY_DETAILS_RESET } from '../../redux/reducers/category/category.types';
 
-const CategoryForm = ({ cancel, cancelButtonRef }) => {
+const CategoryUpdateForm = ({ cancel, cancelButtonRef }) => {
   const dispatch = useDispatch();
   const categoryUpdate = useSelector((state) => state.categoryUpdate);
   const { loading: loadingUpdate } = categoryUpdate;
@@ -122,4 +122,4 @@ const CategoryForm = ({ cancel, cancelButtonRef }) => {
   );
 };
 
-export default CategoryForm;
+export default CategoryUpdateForm;

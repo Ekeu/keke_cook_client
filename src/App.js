@@ -18,6 +18,7 @@ import Password from './pages/user/password.page.jsx';
 import WishList from './pages/user/wish-list.page.jsx';
 import AdminDashboard from './pages/admin/dashboard.page.jsx';
 import Category from './pages/admin/category/category.page.jsx';
+import Subcategory from './pages/admin/subcategory/subcategory.page.jsx';
 
 
 import Header from './components/header/header.component';
@@ -58,6 +59,7 @@ const App = () => {
         <UserRoute exact path='/me/wishlist' component={WishList} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/products/categories' component={Category} />
+        <AdminRoute exact path='/admin/products/subcategories' component={Subcategory} />
       </Switch>
     </>
   );
