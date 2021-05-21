@@ -18,6 +18,9 @@ import {
   CATEGORY_UPDATE_SUCCESS,
   CATEGORY_UPDATE_FAIL,
   CATEGORY_UPDATE_RESET,
+  CATEGORY_SUBCATEGORIES_LIST_REQUEST,
+  CATEGORY_SUBCATEGORIES_LIST_SUCCESS,
+  CATEGORY_SUBCATEGORIES_LIST_FAIL,
 } from './category.types';
 
 export const categoryListReducer = (state = { categories: [] }, action) => {
@@ -27,9 +30,27 @@ export const categoryListReducer = (state = { categories: [] }, action) => {
     case CATEGORY_LIST_SUCCESS:
       return {
         loading: false,
+        success: true,
         categories: action.payload,
       };
     case CATEGORY_LIST_FAIL:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const categorySubcategoriesListReducer = (state = { subcategories: [] }, action) => {
+  switch (action.type) {
+    case CATEGORY_SUBCATEGORIES_LIST_REQUEST:
+      return { loading: true, subcategories: [] };
+    case CATEGORY_SUBCATEGORIES_LIST_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        subcategories: action.payload,
+      };
+    case CATEGORY_SUBCATEGORIES_LIST_FAIL:
       return { loading: false, error: action.payload };
     default:
       return state;

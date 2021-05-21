@@ -19,12 +19,15 @@ const FormInput = forwardRef(
       togglePassword,
       showPassword,
       passwordEyeIcon,
+      formInputWrapperClass,
+      helpText,
+      idHelpText,
       ...otherProps
     },
     ref
   ) => {
     return (
-      <div>
+      <div className={`${formInputWrapperClass}`}>
         {label && (
           <label
             htmlFor={label}
@@ -79,6 +82,14 @@ const FormInput = forwardRef(
         {error && (
           <p className='mt-2 text-sm text-left text-red-600' id='error'>
             {error}
+          </p>
+        )}
+        {helpText && (
+          <p
+            className='mt-2 text-sm text-left text-blue-gray-500'
+            id={idHelpText}
+          >
+            {helpText}
           </p>
         )}
       </div>

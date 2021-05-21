@@ -15,6 +15,9 @@ import {
   CATEGORY_UPDATE_REQUEST,
   CATEGORY_UPDATE_SUCCESS,
   CATEGORY_UPDATE_FAIL,
+  CATEGORY_SUBCATEGORIES_LIST_REQUEST,
+  CATEGORY_SUBCATEGORIES_LIST_SUCCESS,
+  CATEGORY_SUBCATEGORIES_LIST_FAIL,
 } from './category.types';
 
 export const getCategories = () => async (dispatch) => {
@@ -42,11 +45,35 @@ export const getCategory = (slug) => async (dispatch) => {
     const { data } = await axios.get(`/api/v1/categories/${slug}`);
     dispatch({
       type: CATEGORY_DETAILS_SUCCESS,
-      payload: data,
+      payload: data
     });
   } catch (error) {
     dispatch({
       type: CATEGORY_DETAILS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getSubcategoriesFromCategory = (_id) => async (dispatch) => {
+  try {
+    dispatch({ type: CATEGORY_SUBCATEGORIES_LIST_REQUEST });
+    const { data } = await axios.get(`/api/v1/categories/subcategories/${_id}`);
+    dispatch({
+      type: CATEGORY_SUBCATEGORIES_LIST_SUCCESS,
+      payload: data.map((sub) => ({
+        ...sub,
+        label: sub.name,
+        value: sub.name.toLowerCase(),
+        disabled: false,
+      })),
+    });
+  } catch (error) {
+    dispatch({
+      type: CATEGORY_SUBCATEGORIES_LIST_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -116,10 +143,7 @@ export const createCategory = (name) => async (dispatch, getState) => {
   }
 };
 
-export const updateCategory = (slug, name) => async (
-  dispatch,
-  getState
-) => {
+export const updateCategory = (slug, name) => async (dispatch, getState) => {
   try {
     dispatch({
       type: CATEGORY_UPDATE_REQUEST,
@@ -136,7 +160,7 @@ export const updateCategory = (slug, name) => async (
     };
     const { data } = await axios.put(
       `/api/v1/categories/${slug}`,
-      {name},
+      { name },
       config
     );
 

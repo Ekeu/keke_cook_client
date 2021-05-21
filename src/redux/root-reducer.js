@@ -10,6 +10,7 @@ import {
   categoryDeleteReducer,
   categoryDetailsReducer,
   categoryUpdateReducer,
+  categorySubcategoriesListReducer
 } from './reducers/category/category.reducers';
 import {
   subcategoryCreateReducer,
@@ -18,6 +19,13 @@ import {
   subcategoryDetailsReducer,
   subcategoryUpdateReducer,
 } from './reducers/subcategory/subcategory.reducers';
+import {
+  productCreateReducer,
+  productListReducer,
+  productDeleteReducer,
+  productDetailsReducer,
+  productUpdateReducer,
+} from './reducers/product/product.reducers';
 
 const rootReducer = combineReducers({
   userLogin: userLoginReducer,
@@ -27,11 +35,17 @@ const rootReducer = combineReducers({
   categoryDelete: categoryDeleteReducer,
   categoryDetails: categoryDetailsReducer,
   categoryUpdate: categoryUpdateReducer,
+  categorySubcategoriesList: categorySubcategoriesListReducer,
   subcategoryCreate: subcategoryCreateReducer,
   subcategoryList: subcategoryListReducer,
   subcategoryDelete: subcategoryDeleteReducer,
   subcategoryDetails: subcategoryDetailsReducer,
   subcategoryUpdate: subcategoryUpdateReducer,
+  productCreate: productCreateReducer,
+  productList: productListReducer,
+  productDelete: productDeleteReducer,
+  productDetails: productDetailsReducer,
+  productUpdate: productUpdateReducer,
 });
 
 export default rootReducer;

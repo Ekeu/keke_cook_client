@@ -6,10 +6,9 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
 
-const Select = ({ options, value, onChange, label }) => {
-  console.log(value)
+const Select = ({ options, value, onChange, label, listBoxWrapperStyle }) => {
   return (
-    <Listbox value={value} onChange={onChange}>
+    <Listbox value={value} onChange={onChange} className={listBoxWrapperStyle}>
       {({ open }) => (
         <>
           <Listbox.Label className='block text-sm text-left font-medium font-hind text-blue-gray-700'>
