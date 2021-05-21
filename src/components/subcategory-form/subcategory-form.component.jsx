@@ -43,7 +43,7 @@ const SubcategoryForm = ({ cancel, cancelButtonRef }) => {
               options={categories}
               value={selected}
               onChange={setSelected}
-              label={'Catégories'}
+              label={'Catégorie'}
             />
             <div className='mt-4'>
               <FormInput
