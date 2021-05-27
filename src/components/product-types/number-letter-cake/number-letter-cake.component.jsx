@@ -39,7 +39,7 @@ const NumberLetterCake = ({
         {numberLetterCakeSharesList.map((numberLetterCakeShare, index) => {
           return (
             <React.Fragment key={numberLetterCakeShare.share._id}>
-              <div className='col-span-3 sm:col-span-2'>
+              <div className='col-span-2 sm:col-span-2'>
                 <Select
                   options={numberLetterCakeSharesOptions}
                   value={numberLetterCakeShare.share}
@@ -57,7 +57,7 @@ const NumberLetterCake = ({
                 labelText='Prix'
                 min='1'
                 value={numberLetterCakeShare.price}
-                formInputWrapperClass='col-span-3 sm:col-span-2'
+                formInputWrapperClass='col-span-2 sm:col-span-2'
                 autoComplete='off'
                 handleChange={(e) => handleInputPriceShare(e, index)}
                 placeholder='16'

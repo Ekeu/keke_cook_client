@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -6,11 +6,9 @@ import MultiSelect from 'react-multi-select-component';
 import { ChevronDownIcon, ChevronUpIcon, XIcon } from '@heroicons/react/solid';
 import { v4 as uuidv4 } from 'uuid';
 
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { EditorState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
-import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
-import { convertToHTML, convertFromHTML } from 'draft-convert';
+import { convertToHTML } from 'draft-convert';
 
 import UserNav from '../../../components/nav/user.nav.component';
 import UserNavChildrenLayout from '../../../components/nav/user.nav.children.layout.component';
@@ -21,7 +19,9 @@ import Macaron from '../../../components/product-types/macaron/macaron.component
 import NumberLetterCake from '../../../components/product-types/number-letter-cake/number-letter-cake.component';
 import Brownie from '../../../components/product-types/brownie/brownie.component';
 import Notification from '../../../components/notification/notification.component.jsx';
-import Loader from '../../../components/loader/loader.component';
+import InfoColumn from '../../../components/info-column/info-column.component.jsx';
+import CustomButton from '../../../components/custom-button/custom-button.component.jsx';
+import ImageUpload from '../../../components/image-upload/image-upload.component.jsx';
 
 import {
   getCategories,
@@ -93,6 +93,7 @@ const Product = ({ history }) => {
   const [editorState, setEditorState] = useState(() =>
     EditorState.createEmpty()
   );
+  const [images, setImages] = useState([]);
   const [convertedContent, setConvertedContent] = useState(null);
 
   //Cupcake Component State
@@ -138,7 +139,9 @@ const Product = ({ history }) => {
     selectedMacaronShellColorType,
     setSelectedMacaronShellColorType,
   ] = useState([]);
-  const [selectedMacaronFodderType, setSelectedMacaronType] = useState([]);
+  const [selectedMacaronFodderType, setSelectedMacaronFodderType] = useState(
+    []
+  );
   //End Macaron
 
   //Brownie Component State
@@ -154,19 +157,6 @@ const Product = ({ history }) => {
     formState: { errors },
     handleSubmit,
   } = useForm();
-
-  /* const blocksFromHtml = htmlToDraft(
-    '<p>sdfsdfsdfsdf <strong>fsdfsdf</strong></p>'
-  );
-  const { contentBlocks, entityMap } = blocksFromHtml;
-  const contentState = ContentState.createFromBlockArray(
-    contentBlocks,
-    entityMap
-  ); */
-
-  /* const [editorState, setEditorState] = useState(
-    EditorState.createWithContent(contentState)
-  ); */
 
   //Methods
   const onEditorStateChange = (editorState) => {
@@ -231,7 +221,7 @@ const Product = ({ history }) => {
         productSpecifics = {
           price: productInputPrice,
           toppings: selectedBrownieToppingType,
-          filteredToppingss: filterData(selectedBrownieToppingType),
+          filteredToppings: filterData(selectedBrownieToppingType),
         };
       }
       if (selectedType.name === 'Gateau Nature') {
@@ -250,8 +240,8 @@ const Product = ({ history }) => {
           filteredBiscuits: filterData(selectedNumberLetterCakeBiscuitType),
           creams: selectedNumberLetterCakeCreamType,
           filteredCreams: filterData(selectedNumberLetterCakeCreamType),
-          toppings: selectedCupcakeToppingType,
-          filteredToppingss: filterData(selectedCupcakeToppingType),
+          toppings: selectedNumberLetterCakeToppingType,
+          filteredToppingss: filterData(selectedNumberLetterCakeToppingType),
           numberOfNumbersOrLetters,
         };
       }
@@ -266,6 +256,7 @@ const Product = ({ history }) => {
           productType: selectedType.name,
           color: selectedColor.name,
           category: selectedCategory._id,
+          images,
           subcategories: selectedSubcategory.map((ssc) => ssc._id),
           productSpecifics,
         })
@@ -393,7 +384,10 @@ const Product = ({ history }) => {
       selectedType.name === 'Number Cake' ||
       selectedType.name === 'Letter Cake'
     ) {
-      priceArray = numberLetterCakeShares.map((cs) => cs.price);
+      priceArray = numberLetterCakeShares.map((nlcs) => nlcs.price);
+    }
+    if (selectedType.name === 'Macaron') {
+      priceArray = macaronSharesList.map((ms) => ms.price);
     }
     if (
       selectedType.name !== 'Brownie' &&
@@ -406,7 +400,13 @@ const Product = ({ history }) => {
         )}`
       );
     }
-  }, [cupcakeShares, numberLetterCakeShares, selectedType, setValue]);
+  }, [
+    cupcakeShares,
+    numberLetterCakeShares,
+    macaronSharesList,
+    selectedType,
+    setValue,
+  ]);
 
   /**
    * Use Effect to load the corresponding subcategories when parent category changes
@@ -427,15 +427,10 @@ const Product = ({ history }) => {
             <div className='space-y-6 mt-2'>
               <div className='bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6'>
                 <div className='md:grid md:grid-cols-3 md:gap-6'>
-                  <div className='md:col-span-1'>
-                    <h3 className='text-lg font-medium leading-6 text-gray-900'>
-                      Informations Générales
-                    </h3>
-                    <p className='mt-1 text-sm text-gray-500'>
-                      Cette section regroupe les informations de base nécéssaire
-                      pour tout produit
-                    </p>
-                  </div>
+                  <InfoColumn headline='Informations Générales'>
+                    Cette section regroupe les informations de base nécéssaire
+                    pour tout produit
+                  </InfoColumn>
                   <div className='mt-5 md:mt-0 md:col-span-2'>
                     <div className='space-y-6'>
                       <div className='grid grid-cols-3 gap-6'>
@@ -593,47 +588,7 @@ const Product = ({ history }) => {
                           />
                         )}
                       </div>
-                      <div>
-                        <label className='block text-sm font-medium text-gray-700'>
-                          Cover photo
-                        </label>
-                        <div className='mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md'>
-                          <div className='space-y-1 text-center'>
-                            <svg
-                              className='mx-auto h-12 w-12 text-gray-400'
-                              stroke='currentColor'
-                              fill='none'
-                              viewBox='0 0 48 48'
-                              aria-hidden='true'
-                            >
-                              <path
-                                d='M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02'
-                                strokeWidth={2}
-                                strokeLinecap='round'
-                                strokeLinejoin='round'
-                              />
-                            </svg>
-                            <div className='flex text-sm text-gray-600'>
-                              <label
-                                htmlFor='file-upload'
-                                className='relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500'
-                              >
-                                <span>Upload a file</span>
-                                <input
-                                  id='file-upload'
-                                  name='file-upload'
-                                  type='file'
-                                  className='sr-only'
-                                />
-                              </label>
-                              <p className='pl-1'>or drag and drop</p>
-                            </div>
-                            <p className='text-xs text-gray-500'>
-                              PNG, JPG, GIF up to 10MB
-                            </p>
-                          </div>
-                        </div>
-                      </div>
+                      <ImageUpload images={images} setImages={setImages} />
                     </div>
                   </div>
                 </div>
@@ -642,15 +597,10 @@ const Product = ({ history }) => {
               {selectedType.name !== 'Gateau Nature' && (
                 <div className='bg-white shadow px-4 py-5 sm:rounded-lg sm:p-6'>
                   <div className='md:grid md:grid-cols-3 md:gap-6'>
-                    <div className='md:col-span-1'>
-                      <h3 className='text-lg font-medium leading-6 text-gray-900'>
-                        Information Détaillée
-                      </h3>
-                      <p className='mt-1 text-sm text-gray-500'>
-                        Cette section regroupe les informations nécéssaires qui
-                        sont spécifique à chaque type de produit
-                      </p>
-                    </div>
+                    <InfoColumn headline='Informations Détaillées'>
+                      Cette section regroupe les informations nécéssaires qui
+                      sont spécifique à chaque type de produit
+                    </InfoColumn>
                     <div className='mt-5 md:mt-0 md:col-span-2'>
                       {selectedType.name === 'Cupcake' && (
                         <CupCake
@@ -730,7 +680,9 @@ const Product = ({ history }) => {
                           }
                           macaronFodderOptions={MACARON_FODDER}
                           selectedMacaronFodderType={selectedMacaronFodderType}
-                          setSelectedMacaronType={setSelectedMacaronType}
+                          setSelectedMacaronFodderType={
+                            setSelectedMacaronFodderType
+                          }
                         />
                       )}
                       {(selectedType.name === 'Number Cake' ||
@@ -788,18 +740,15 @@ const Product = ({ history }) => {
                 </div>
               )}
               <div className='flex justify-end'>
-                <button
-                  type='button'
-                  className='bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                >
-                  Cancel
-                </button>
-                <button
+                <CustomButton
                   type='submit'
-                  className='ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+                  loading={loadingCreate}
+                  loaderHeight={'h-4'}
+                  loaderWidth={'h-4'}
+                  customStyles='w-max border border-transparent text-white bg-rose-600 hover:bg-rose-700 sm:col-start-2 sm:text-sm'
                 >
-                  Save
-                </button>
+                  Enregistrer
+                </CustomButton>
               </div>
             </div>
           </form>

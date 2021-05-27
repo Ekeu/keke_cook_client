@@ -20,12 +20,13 @@ import AdminDashboard from './pages/admin/dashboard.page.jsx';
 import Category from './pages/admin/category/category.page.jsx';
 import Subcategory from './pages/admin/subcategory/subcategory.page.jsx';
 import Product from './pages/admin/product/product.page.jsx';
-
+import ProductUpdate from './pages/admin/product-update/product-update.page.jsx';
+import Products from './pages/admin/products/products.page.jsx';
 
 import Header from './components/header/header.component';
 
-import UserRoute from './components/private-routes/user-routes.component'
-import AdminRoute from './components/private-routes/admin-routes.component'
+import UserRoute from './components/private-routes/user-routes.component';
+import AdminRoute from './components/private-routes/admin-routes.component';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -59,8 +60,22 @@ const App = () => {
         <UserRoute exact path='/me/password/update' component={Password} />
         <UserRoute exact path='/me/wishlist' component={WishList} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
-        <AdminRoute exact path='/admin/products/categories' component={Category} />
-        <AdminRoute exact path='/admin/products/subcategories' component={Subcategory} />
+        <AdminRoute exact path='/admin/products' component={Products} />
+        <AdminRoute
+          exact
+          path='/admin/products/:slug/edit'
+          component={ProductUpdate}
+        />
+        <AdminRoute
+          exact
+          path='/admin/products/categories'
+          component={Category}
+        />
+        <AdminRoute
+          exact
+          path='/admin/products/subcategories'
+          component={Subcategory}
+        />
         <AdminRoute exact path='/admin/products/add' component={Product} />
       </Switch>
     </>

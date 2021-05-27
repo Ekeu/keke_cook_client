@@ -27,6 +27,7 @@
     "react-dom": "^17.0.2",
     "react-draft-wysiwyg": "^1.14.7",
     "react-hook-form": "^7.4.0",
+    "react-image-file-resizer": "^0.4.4",
     "react-multi-select-component": "^4.0.1",
     "react-scripts": "4.0.3",
     "react-toastify": "^7.0.4",

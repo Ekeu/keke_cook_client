@@ -17,14 +17,10 @@ import {
   PRODUCT_UPDATE_FAIL,
 } from './product.types';
 
-export const listFoods = (keyword = '', pageNumber = '') => async (
-  dispatch
-) => {
+export const listProducts = (size) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_LIST_REQUEST });
-    const { data } = await axios.get(
-      `/api/foods?keyword=${keyword}&pageNumber=${pageNumber}`
-    );
+    const { data } = await axios.get(`/api/v1/products?size=${size}`);
     dispatch({
       type: PRODUCT_LIST_SUCCESS,
       payload: data,
@@ -40,10 +36,10 @@ export const listFoods = (keyword = '', pageNumber = '') => async (
   }
 };
 
-export const listFoodDetails = (id) => async (dispatch) => {
+export const listProductDetails = (slug) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST });
-    const { data } = await axios.get(`/api/foods/${id}`);
+    const { data } = await axios.get(`/api/v1/products/${slug}`);
     dispatch({
       type: PRODUCT_DETAILS_SUCCESS,
       payload: data,
@@ -59,7 +55,7 @@ export const listFoodDetails = (id) => async (dispatch) => {
   }
 };
 
-export const deleteFood = (_id) => async (dispatch, getState) => {
+export const deleteProduct = (slug) => async (dispatch, getState) => {
   try {
     dispatch({
       type: PRODUCT_DELETE_REQUEST,
@@ -70,11 +66,11 @@ export const deleteFood = (_id) => async (dispatch, getState) => {
     } = getState();
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: userInfo.token,
       },
     };
 
-    await axios.delete(`/api/foods/${_id}`, config);
+    await axios.delete(`/api/v1/products/${slug}`, config);
 
     dispatch({
       type: PRODUCT_DELETE_SUCCESS,
@@ -122,7 +118,7 @@ export const createProduct = (product) => async (dispatch, getState) => {
   }
 };
 
-export const updateFood = (food) => async (dispatch, getState) => {
+export const updateProduct = (slug, product) => async (dispatch, getState) => {
   try {
     dispatch({
       type: PRODUCT_UPDATE_REQUEST,
@@ -133,11 +129,14 @@ export const updateFood = (food) => async (dispatch, getState) => {
     } = getState();
     const config = {
       headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: userInfo.token,
       },
     };
-    const { data } = await axios.put(`/api/foods/${food._id}`, food, config);
+    const { data } = await axios.put(
+      `/api/v1/products/${slug}`,
+      product,
+      config
+    );
 
     dispatch({
       type: PRODUCT_UPDATE_SUCCESS,

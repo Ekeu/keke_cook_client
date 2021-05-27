@@ -31,6 +31,7 @@ import {
   ADMIN_NAVIGATION,
   SUBCATEGORY_HEADLINE,
   SUBCATEGORY_DESCRIPTION,
+  SUBCATEGORY_DELETE_ALERT_MESSAGE
 } from '../../../constants/admin.menu.constants';
 
 const options = [
@@ -292,9 +293,7 @@ const Category = ({ history }) => {
           headline={"Suppression d'une sous catégorie"}
           loadingDelete={loadingDelete}
         >
-          Êtes vous sûr de vouloir supprimer cette sous ccatégorie? Toutes les
-          données liées à cette sous catégorie seront définitivement supprimées
-          de nos servveurs. Cette action est irreversible.
+          {SUBCATEGORY_DELETE_ALERT_MESSAGE}
         </DeleteAlert>
       </Modal>
     </>
