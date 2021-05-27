@@ -58,9 +58,21 @@ export const ADMIN_NAVIGATION_COLORS = {
   sideMobileNavButtonBorderColor: 'border-blue-gray-200',
 };
 
-export const CATEGORY_HEADLINE = 'Catégories'
-export const CATEGORY_DESCRIPTION = 'Créer, modifier et supprimer vos différentes catégories'
-export const SUBCATEGORY_HEADLINE = 'Sous Catégories'
-export const SUBCATEGORY_DESCRIPTION = 'Créer, modifier et supprimer vos différentes sous catégories'
-export const PRODUCT_HEADLINE = 'Ajouter un Produit'
-export const PRODUCT_DESCRIPTION = 'Remplissez le formulaire ci-dessous pour créer ou enregistrer un nouveau produit'
+export const CATEGORY_HEADLINE = 'Catégories';
+export const CATEGORY_DESCRIPTION =
+  'Créer, modifier et supprimer vos différentes catégories';
+export const SUBCATEGORY_HEADLINE = 'Sous Catégories';
+export const SUBCATEGORY_DESCRIPTION =
+  'Créer, modifier et supprimer vos différentes sous catégories';
+export const PRODUCT_HEADLINE = 'Ajouter un Produit';
+export const PRODUCT_DESCRIPTION =
+  'Remplisser le formulaire ci-dessous pour créer ou enregistrer un nouveau produit';
+export const PRODUCTS_HEADLINE = 'Produits';
+export const PRODUCTS_DESCRIPTION = 'Modifier et supprimer vos produits';
+
+export const CATEGORY_DELETE_ALERT_MESSAGE =
+  'Êtes vous sûr de vouloir supprimer cette catégorie? Toutes les données liées à cette catégorie seront définitivement supprimées de nos servveurs. Cette action est irreversible.';
+export const SUBCATEGORY_DELETE_ALERT_MESSAGE =
+  'Êtes vous sûr de vouloir supprimer cette sous ccatégorie? Toutes les données liées à cette sous catégorie seront définitivement supprimées de nos servveurs. Cette action est irreversible.';
+export const PRODUCT_DELETE_ALERT_MESSAGE =
+  'Êtes vous sûr de vouloir supprimer ce produit? Toutes les données liées à ce produit seront définitivement supprimées de nos servveurs. Cette action est irreversible.';

@@ -30,18 +30,8 @@ import {
   ADMIN_NAVIGATION,
   CATEGORY_HEADLINE,
   CATEGORY_DESCRIPTION,
+  CATEGORY_DELETE_ALERT_MESSAGE,
 } from '../../../constants/admin.menu.constants';
-
-const options = [
-  {
-    url: '/',
-    name: 'Modifier',
-  },
-  {
-    url: '/',
-    name: 'Supprimer',
-  },
-];
 
 const Category = ({ history }) => {
   const dispatch = useDispatch();
@@ -192,7 +182,6 @@ const Category = ({ history }) => {
                     <CategoryComponent
                       key={category._id}
                       category={category}
-                      options={options}
                       bgColor={'bg-rose-500'}
                       menuDeleteOptionAction={deleteOptionAction}
                       menuUpdateOptionAction={loadCategoryToUpdate}
@@ -277,9 +266,7 @@ const Category = ({ history }) => {
           headline={"Suppression d'une catégorie"}
           loadingDelete={loadingDelete}
         >
-          Êtes vous sûr de vouloir supprimer cette catégorie? Toutes les données
-          liées à cette catégorie seront définitivement supprimées de nos
-          servveurs. Cette action est irreversible.
+          {CATEGORY_DELETE_ALERT_MESSAGE}
         </DeleteAlert>
       </Modal>
     </>

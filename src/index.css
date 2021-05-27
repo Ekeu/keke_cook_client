@@ -49,7 +49,7 @@
 }
 .rmsc .item-renderer {
   display: flex !important;
-  align-items: end !important;
+  align-items: flex-end !important;
 }
 .rmsc .item-renderer span {
   margin-left: 0.5rem;

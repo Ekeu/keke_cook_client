@@ -21,7 +21,7 @@ const Macaron = ({
   setSelectedMacaronShellColorType,
   macaronFodderOptions,
   selectedMacaronFodderType,
-  setSelectedMacaronType,
+  setSelectedMacaronFodderType,
 }) => {
   return (
     <>
@@ -34,7 +34,7 @@ const Macaron = ({
         {macaronSharesList.map((macaronShare, index) => {
           return (
             <React.Fragment key={macaronShare.share._id}>
-              <div className='col-span-3 sm:col-span-2'>
+              <div className='col-span-2 sm:col-span-2'>
                 <Select
                   options={macaronSharesOptions}
                   value={macaronShare.share}
@@ -50,7 +50,7 @@ const Macaron = ({
                 labelText='Prix'
                 min='1'
                 value={macaronShare.price}
-                formInputWrapperClass='col-span-3 sm:col-span-2'
+                formInputWrapperClass='col-span-2 sm:col-span-2'
                 autoComplete='off'
                 handleChange={(e) => handleInputPriceShare(e, index)}
                 placeholder='16'
@@ -81,9 +81,9 @@ const Macaron = ({
             </React.Fragment>
           );
         })}
-        <div className='col-span-6 sm:col-span-3  border-t-2 border-blue-gray-200 pt-4'>
+        <div className='col-span-6 sm:col-span-3 border-t-2 border-blue-gray-200 pt-4'>
           <label className='mb-1 block text-sm font-medium text-blue-gray-700 font-hind'>
-            Biscuits(s)
+            Couleur(s) coque
           </label>
           <MultiSelect
             options={macaronShellColorOptions}
@@ -97,7 +97,7 @@ const Macaron = ({
             className='text-sm font-hind'
           />
         </div>
-        <div className='col-span-6 sm:col-span-3'>
+        <div className='col-span-6 sm:col-span-3 border-t-2 border-blue-gray-200 pt-4'>
           <label className='mb-1 block text-sm font-medium text-blue-gray-700 font-hind'>
             Fourrage(s)
           </label>
@@ -105,7 +105,7 @@ const Macaron = ({
             options={macaronFodderOptions}
             value={selectedMacaronFodderType}
             overrideStrings={overrideStrings}
-            onChange={setSelectedMacaronType}
+            onChange={setSelectedMacaronFodderType}
             ArrowRenderer={ArrowRenderer}
             ClearIcon={ClearIcon}
             ClearSelectedIcon={ClearSelectedIcon}

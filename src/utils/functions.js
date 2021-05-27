@@ -11,3 +11,33 @@ export const currencyFormatter = (value) => {
     currency: 'EUR',
   }).format(value);
 };
+
+export const filterShares = (productShares) => {
+  return productShares.map((ps) => ({
+    share: ps.share.name,
+    price: ps.price,
+  }));
+};
+
+export const filterData = (data) => {
+  return data.map((d) => d.name);
+};
+
+export const updateSelectShares = (shares, data, index) => {
+  const shareList = [...shares];
+  shareList[index]['share'] = data;
+  return shareList;
+};
+
+export const updatePrice = (shares, e, index) => {
+  const { name, value } = e.target;
+  const shareList = [...shares];
+  shareList[index][name] = value;
+  return shareList;
+};
+
+export const updateAfterRemove = (shares, index) => {
+  const shareList = [...shares];
+  shareList.splice(index, 1);
+  return shareList;
+};
