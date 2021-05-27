@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import MultiSelect from 'react-multi-select-component';
-import { ChevronDownIcon, ChevronUpIcon, XIcon } from '@heroicons/react/solid';
 import { v4 as uuidv4 } from 'uuid';
 
 import { EditorState } from 'draft-js';
@@ -31,7 +30,15 @@ import {
 import { createProduct } from '../../../redux/reducers/product/product.actions';
 import { PRODUCT_CREATE_RESET } from '../../../redux/reducers/product/product.types';
 
-import { currencyFormatter } from '../../../utils/functions';
+import {
+  currencyFormatter,
+  filterShares,
+  filterData,
+  updateSelectShares,
+  updatePrice,
+  updateAfterRemove,
+} from '../../../utils/functions';
+import { ArrowRenderer, CustomClearIcon } from '../../../utils/components';
 
 import {
   ADMIN_NAVIGATION,
@@ -104,10 +111,8 @@ const Product = ({ history }) => {
   const [selectedCupcakeFodderType, setSelectedCupcakeFodderType] = useState(
     []
   );
-  const [
-    selectedCupcakeCreamColorType,
-    setSelectedCupcakeCreamColorType,
-  ] = useState([]);
+  const [selectedCupcakeCreamColorType, setSelectedCupcakeCreamColorType] =
+    useState([]);
   const [selectedCupcakeToppingType, setSelectedCupcakeToppingType] = useState(
     []
   );
@@ -135,10 +140,8 @@ const Product = ({ history }) => {
   const [macaronSharesList, setMacaronSharesList] = useState([
     { share: MACARON_SHARES[0], price: 1 },
   ]);
-  const [
-    selectedMacaronShellColorType,
-    setSelectedMacaronShellColorType,
-  ] = useState([]);
+  const [selectedMacaronShellColorType, setSelectedMacaronShellColorType] =
+    useState([]);
   const [selectedMacaronFodderType, setSelectedMacaronFodderType] = useState(
     []
   );
@@ -167,34 +170,7 @@ const Product = ({ history }) => {
     const currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
     setConvertedContent(currentContentAsHTML);
   };
-  const ArrowRenderer = ({ expanded }) => (
-    <>
-      {expanded ? (
-        <ChevronUpIcon
-          className='h-5 w-5 text-blue-gray-400'
-          aria-hidden='true'
-        />
-      ) : (
-        <ChevronDownIcon
-          className='h-5 w-5 text-blue-gray-400'
-          aria-hidden='true'
-        />
-      )}
-    </>
-  );
-  const CustomClearIcon = () => (
-    <XIcon className='h-4 w-4 text-blue-gray-400' aria-hidden='true' />
-  );
-  const filterShares = (productShares) => {
-    return productShares.map((ps) => ({
-      share: ps.share.name,
-      price: ps.price,
-    }));
-  };
 
-  const filterData = (data) => {
-    return data.map((d) => d.name);
-  };
   const onSubmit = handleSubmit(
     ({
       productTitle,
@@ -263,24 +239,6 @@ const Product = ({ history }) => {
       );
     }
   );
-  const updateSelectShares = (shares, data, index) => {
-    const shareList = [...shares];
-    shareList[index]['share'] = data;
-    return shareList;
-  };
-
-  const updatePrice = (shares, e, index) => {
-    const { name, value } = e.target;
-    const shareList = [...shares];
-    shareList[index][name] = value;
-    return shareList;
-  };
-
-  const updateAfterRemove = (shares, index) => {
-    const shareList = [...shares];
-    shareList.splice(index, 1);
-    return shareList;
-  };
 
   //Cupcake methods
   const handleSelectedCupcakeShare = (data, index) => {
