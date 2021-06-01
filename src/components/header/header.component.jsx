@@ -1,7 +1,7 @@
 import React from 'react';
 import { Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { MenuIcon, XIcon, ShoppingBagIcon } from '@heroicons/react/outline';
+import { MenuIcon, XIcon, ShoppingCartIcon } from '@heroicons/react/outline';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -79,7 +79,7 @@ const Header = () => {
                 <div className='hidden lg:ml-4 lg:flex lg:items-center'>
                   <button className='flex-shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
                     <span className='sr-only'>View notifications</span>
-                    <ShoppingBagIcon className='h-6 w-6' aria-hidden='true' />
+                    <ShoppingCartIcon className='h-6 w-6' aria-hidden='true' />
                   </button>
                   {userInfo ? (
                     <Menu as='div' className='ml-4 relative flex-shrink-0'>

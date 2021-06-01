@@ -101,8 +101,8 @@ const NumberLetterCake = ({
               message: 'Le nombre ne doit pas être supérieur à 2',
             },
             min: {
-              value: 1,
-              message: 'Le nombre ne doit pas être inférieur à 1',
+              value: 0,
+              message: 'Le nombre ne doit pas être inférieur à 0',
             },
           })}
           formInputWrapperClass='col-span-6 sm:col-span-3 border-t-2 border-blue-gray-200 pt-4'
@@ -110,7 +110,29 @@ const NumberLetterCake = ({
           placeholder='1'
           error={errors.numberOfNumbersOrLetters?.message}
         />
-        <div className='col-span-6 sm:col-span-3  border-t-2 border-blue-gray-200 pt-4'>
+        <FormInput
+          id='numberOfFlavors'
+          name='numberOfFlavors'
+          type='number'
+          label='numberOfFlavors'
+          labelText='Nombres de Lettres ou Chiffres'
+          register={register('numberOfFlavors', {
+            required: 'Entrez le nombre de lettre ou de chiffres',
+            max: {
+              value: 2,
+              message: 'Le nombre ne doit pas être supérieur à 2',
+            },
+            min: {
+              value: 1,
+              message: 'Le nombre ne doit pas être inférieur à 1',
+            },
+          })}
+          formInputWrapperClass='col-span-6 sm:col-span-3 border-t-2 border-blue-gray-200 pt-4'
+          autoComplete='off'
+          placeholder='1'
+          error={errors.numberOfFlavors?.message}
+        />
+        <div className='col-span-6 sm:col-span-3'>
           <label className='mb-1 block text-sm font-medium text-blue-gray-700 font-hind'>
             Biscuits(s)
           </label>
@@ -142,7 +164,7 @@ const NumberLetterCake = ({
             className='text-sm font-hind'
           />
         </div>
-        <div className='col-span-6 sm:col-span-3'>
+        <div className='col-span-6'>
           <label className='mb-1 block text-sm font-medium text-blue-gray-700 font-hind'>
             Topping(s)
           </label>

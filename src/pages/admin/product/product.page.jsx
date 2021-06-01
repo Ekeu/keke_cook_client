@@ -177,6 +177,7 @@ const Product = ({ history }) => {
       productPrice,
       productInputPrice,
       numberOfNumbersOrLetters,
+      numberOfFlavors
     }) => {
       let productSpecifics;
       if (selectedType.name === 'Cupcake') {
@@ -205,6 +206,16 @@ const Product = ({ history }) => {
           price: productInputPrice,
         };
       }
+      if (selectedType.name === 'Macaron') {
+        productSpecifics = {
+          shares: macaronSharesList,
+          filteredShares: filterShares(macaronSharesList),
+          shellColors: selectedMacaronShellColorType,
+          filteredShellColors: filterData(selectedMacaronShellColorType),
+          fodders: selectedMacaronFodderType,
+          filteredFodders: filterData(selectedMacaronFodderType),
+        };
+      }
       if (
         selectedType.name === 'Number Cake' ||
         selectedType.name === 'Letter Cake'
@@ -219,6 +230,7 @@ const Product = ({ history }) => {
           toppings: selectedNumberLetterCakeToppingType,
           filteredToppingss: filterData(selectedNumberLetterCakeToppingType),
           numberOfNumbersOrLetters,
+          numberOfFlavors,
         };
       }
       dispatch(
@@ -308,6 +320,7 @@ const Product = ({ history }) => {
           La création du produit {createdProduct?.title} à réussie
         </Notification>
       );
+      history.push(`/admin/products`);
     }
     if (errorCreate) {
       toast(

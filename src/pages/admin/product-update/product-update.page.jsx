@@ -180,6 +180,7 @@ const ProductUpdate = ({ match, history }) => {
       productPrice,
       productInputPrice,
       numberOfNumbersOrLetters,
+      numberOfFlavors,
     }) => {
       let productSpecifics;
       if (selectedType.name === 'Cupcake') {
@@ -208,6 +209,16 @@ const ProductUpdate = ({ match, history }) => {
           price: productInputPrice,
         };
       }
+      if (selectedType.name === 'Macaron') {
+        productSpecifics = {
+          shares: macaronSharesList,
+          filteredShares: filterShares(macaronSharesList),
+          shellColors: selectedMacaronShellColorType,
+          filteredShellColors: filterData(selectedMacaronShellColorType),
+          fodders: selectedMacaronFodderType,
+          filteredFodders: filterData(selectedMacaronFodderType),
+        };
+      }
       if (
         selectedType.name === 'Number Cake' ||
         selectedType.name === 'Letter Cake'
@@ -222,6 +233,7 @@ const ProductUpdate = ({ match, history }) => {
           toppings: selectedNumberLetterCakeToppingType,
           filteredToppingss: filterData(selectedNumberLetterCakeToppingType),
           numberOfNumbersOrLetters,
+          numberOfFlavors,
         };
       }
       dispatch(
@@ -328,13 +340,14 @@ const ProductUpdate = ({ match, history }) => {
         dispatch(listProductDetails(productSlug));
       } else {
         setValue('productTitle', product.title);
-        const blocksFromHtml = htmlToDraft(product.description);
+        const blocksFromHtml = htmlToDraft(product?.description);
         const { contentBlocks, entityMap } = blocksFromHtml;
         const contentState = ContentState.createFromBlockArray(
           contentBlocks,
           entityMap
         );
         setEditorState(EditorState.createWithContent(contentState));
+        setConvertedContent(EditorState.createWithContent(contentState).getCurrentContent())
         if (
           product.productType !== 'Brownie' &&
           product.productType !== 'Gateau Nature'
@@ -398,6 +411,7 @@ const ProductUpdate = ({ match, history }) => {
             'numberOfNumbersOrLetters',
             product.productSpecifics.numberOfNumbersOrLetters
           );
+          setValue('numberOfFlavors', product.productSpecifics.numberOfFlavors);
         }
       }
     }
