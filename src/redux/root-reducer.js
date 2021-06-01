@@ -25,6 +25,8 @@ import {
   productDeleteReducer,
   productDetailsReducer,
   productUpdateReducer,
+  productSortNewReducer,
+  productSortSoldReducer,
 } from './reducers/product/product.reducers';
 
 const rootReducer = combineReducers({
@@ -46,6 +48,8 @@ const rootReducer = combineReducers({
   productDelete: productDeleteReducer,
   productDetails: productDetailsReducer,
   productUpdate: productUpdateReducer,
+  productSortNew: productSortNewReducer,
+  productSortSold: productSortSoldReducer,
 });
 
 export default rootReducer;

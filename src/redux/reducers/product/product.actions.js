@@ -15,6 +15,12 @@ import {
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_UPDATE_SUCCESS,
   PRODUCT_UPDATE_FAIL,
+  PRODUCT_SORT_NEW_REQUEST,
+  PRODUCT_SORT_NEW_SUCCESS,
+  PRODUCT_SORT_NEW_FAIL,
+  PRODUCT_SORT_TOP_REQUEST,
+  PRODUCT_SORT_TOP_SUCCESS,
+  PRODUCT_SORT_TOP_FAIL,
 } from './product.types';
 
 export const listProducts = (size) => async (dispatch) => {
@@ -152,3 +158,49 @@ export const updateProduct = (slug, product) => async (dispatch, getState) => {
     });
   }
 };
+
+export const listSortNewProducts =
+  (order, pageNumber, sort = 'createdAt') =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: PRODUCT_SORT_NEW_REQUEST });
+      const { data } = await axios.get(
+        `/api/v1/products/filter?sort=${sort}&order=${order}&pageNumber=${pageNumber}`
+      );
+      dispatch({
+        type: PRODUCT_SORT_NEW_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: PRODUCT_SORT_NEW_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
+
+export const listSortSoldProducts =
+  (order, pageNumber, sort = 'sold') =>
+  async (dispatch) => {
+    try {
+      dispatch({ type: PRODUCT_SORT_TOP_REQUEST });
+      const { data } = await axios.get(
+        `/api/v1/products/filter?sort=${sort}&order=${order}&pageNumber=${pageNumber}`
+      );
+      dispatch({
+        type: PRODUCT_SORT_TOP_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      dispatch({
+        type: PRODUCT_SORT_TOP_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };

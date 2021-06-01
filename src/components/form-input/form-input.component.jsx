@@ -14,7 +14,9 @@ const FormInput = forwardRef(
       labelText,
       trailingIcon,
       error,
+      errorTextColor,
       register,
+      ringStyling,
       validation,
       togglePassword,
       showPassword,
@@ -22,6 +24,7 @@ const FormInput = forwardRef(
       formInputWrapperClass,
       helpText,
       idHelpText,
+      inputStyles,
       ...otherProps
     },
     ref
@@ -45,10 +48,10 @@ const FormInput = forwardRef(
             className={`${
               error
                 ? 'pr-10 border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500'
-                : 'border-blue-gray-300 placeholder-blue-gray-500 focus:ring-blue-gray-900 focus:border-blue-gray-900'
+                : `border-blue-gray-300 placeholder-blue-gray-500 ${ringStyling ? ringStyling : 'focus:ring-blue-gray-900 focus:border-blue-gray-900'}`
             } appearance-none block w-full ${
               trailingIcon ? 'py-3' : 'py-3 px-5'
-            } sm:text-sm font-hind rounded-md`}
+            } sm:text-sm font-hind rounded-md focus:outline-none ${inputStyles}`}
           />
 
           {!error && passwordEyeIcon && (
@@ -80,7 +83,12 @@ const FormInput = forwardRef(
           )}
         </div>
         {error && (
-          <p className='mt-2 text-sm text-left text-red-600' id='error'>
+          <p
+            className={`mt-2 text-sm text-left ${
+              errorTextColor ? errorTextColor : 'text-red-600'
+            }`}
+            id='error'
+          >
             {error}
           </p>
         )}

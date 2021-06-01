@@ -19,7 +19,8 @@ import WishList from './pages/user/wish-list.page.jsx';
 import AdminDashboard from './pages/admin/dashboard.page.jsx';
 import Category from './pages/admin/category/category.page.jsx';
 import Subcategory from './pages/admin/subcategory/subcategory.page.jsx';
-import Product from './pages/admin/product/product.page.jsx';
+import CreateProduct from './pages/admin/product/product.page.jsx';
+import Product from './pages/product/product.page.jsx';
 import ProductUpdate from './pages/admin/product-update/product-update.page.jsx';
 import Products from './pages/admin/products/products.page.jsx';
 
@@ -27,6 +28,7 @@ import Header from './components/header/header.component';
 
 import UserRoute from './components/private-routes/user-routes.component';
 import AdminRoute from './components/private-routes/admin-routes.component';
+import Footer from './components/footer/footer.component.jsx';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -56,6 +58,7 @@ const App = () => {
         <Route exact path='/register' component={Register} />
         <Route exact path='/register/finish' component={FinishRegistration} />
         <Route exact path='/password/new' component={ForgotPassword} />
+        <Route exact path='/product/:slug' component={Product} />
         <UserRoute exact path='/me/account' component={History} />
         <UserRoute exact path='/me/password/update' component={Password} />
         <UserRoute exact path='/me/wishlist' component={WishList} />
@@ -76,8 +79,13 @@ const App = () => {
           path='/admin/products/subcategories'
           component={Subcategory}
         />
-        <AdminRoute exact path='/admin/products/add' component={Product} />
+        <AdminRoute
+          exact
+          path='/admin/products/add'
+          component={CreateProduct}
+        />
       </Switch>
+      <Footer />
     </>
   );
 };

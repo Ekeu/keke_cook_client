@@ -73,3 +73,35 @@
 .rmsc .dropdown-heading {
   cursor: pointer !important;
 }
+.carousel-slider {
+  position: relative;
+  border-radius: 1rem;
+  --tw-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+    var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  overflow: hidden;
+}
+.carousel-slider .slider-wrapper .slider .slide.selected img {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.carousel-root .carousel .thumbs-wrapper {
+  display: flex;
+  justify-content: center;
+}
+.carousel-root .carousel .thumb {
+  border: none;
+  border-radius: 0.25rem;
+  transition: none
+}
+.carousel-root .carousel .thumb.selected,
+.carousel-root .carousel .thumb:hover {
+  border: 2px solid #f43f5e;
+}

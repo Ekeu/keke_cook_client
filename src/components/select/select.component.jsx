@@ -11,7 +11,7 @@ const Select = ({ options, value, onChange, label, listBoxWrapperStyle }) => {
     <Listbox value={value} onChange={onChange} className={listBoxWrapperStyle}>
       {({ open }) => (
         <>
-          <Listbox.Label className='block text-sm text-left font-medium font-hind text-blue-gray-700'>
+          <Listbox.Label className='block text-sm text-left font-medium font-hind text-blue-gray-800'>
             {label}
           </Listbox.Label>
           <div className='mt-1 relative'>
@@ -36,7 +36,7 @@ const Select = ({ options, value, onChange, label, listBoxWrapperStyle }) => {
                 static
                 className='absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base text-left font-hind ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm'
               >
-                {options.map((option) => (
+                {options?.map((option) => (
                   <Listbox.Option
                     key={option._id}
                     className={({ active }) =>

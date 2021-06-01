@@ -23,7 +23,11 @@ module.exports = {
         'blue-gray': colors.blueGray,
       },
       screens: {
-        'xs': '520px',
+        xs: '520px',
+      },
+      spacing: {
+        '2/3': '66.666667%',
+        '5/6': '83.333333%',
       },
     },
   },
