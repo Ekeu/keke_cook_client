@@ -31,10 +31,20 @@ const Login = ({ history }) => {
 
   const { loading, error, userInfo } = userLogin;
 
-  const roleBasedRedirect =
-    userInfo?.role === 'admin' ? '/admin/dashboard' : '/me/account';
-
   useEffect(() => {
+    const roleBasedRedirect = () => {
+      const intendedRoute = history.location.state;
+      if (intendedRoute) {
+        return intendedRoute.from;
+      } else {
+        if (userInfo?.role === 'admin') {
+          return '/admin/dashboard';
+        } else {
+          return '/me/account';
+        }
+      }
+    };
+
     if (error) {
       toast(
         <Notification error headline='Erreur de connexion'>
@@ -43,10 +53,10 @@ const Login = ({ history }) => {
       );
     } else {
       if (userInfo) {
-        history.push(roleBasedRedirect);
+        history.push(roleBasedRedirect());
       }
     }
-  }, [history, userInfo, error, roleBasedRedirect]);
+  }, [history, userInfo, error]);
 
   const {
     register,

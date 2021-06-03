@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import MailchimpSubscribe from 'react-mailchimp-subscribe';
 
 import FormInput from '../form-input/form-input.component.jsx';
 import Notification from '../notification/notification.component.jsx';

@@ -31,8 +31,10 @@ const TopProducts = () => {
       headline='Meilleures Ventes'
       loading={loading}
       products={products}
-      pages={pages}
+      pages={(pages / 3) * 2}
       page={page}
+      showPagination
+      showHeadline
       setPageNumber={setPageNumber}
     ></HeadlineAndProducts>
   );

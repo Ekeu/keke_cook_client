@@ -6,7 +6,7 @@ import Rating from '../rating/rating.component';
 import NoImage from '../../assets/images/no-product-image.png';
 
 const ProductCard = ({
-  product: { slug, title, images, category, price, rating, numReviews },
+  product: { slug, title, images, category, price, ratings },
 }) => {
   return (
     <div className='space-y-4'>
@@ -33,7 +33,7 @@ const ProductCard = ({
               </h4>
             </Link>
             <div className='mt-1 font-poppins text-blue-gray-800'>{price}</div>
-            <Rating value={rating} reviews={numReviews} />
+            <Rating ratings={ratings} />
           </div>
         </div>
       </div>

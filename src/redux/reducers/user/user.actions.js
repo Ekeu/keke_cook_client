@@ -36,16 +36,15 @@ export const login = (email, password) => async (dispatch) => {
     dispatch({
       type: USER_LOGIN_SUCCESS,
       payload: {
-        email: res.data.email,
-        displayName: res.data.displayName,
-        photoURL: res.data.photoURL,
-        role: res.data.role,
-        _id: res.data._id,
+        email: res?.data?.email,
+        displayName: res?.data.displayName,
+        photoURL: res?.data.photoURL,
+        role: res?.data.role,
+        _id: res?.data._id,
         token: idTokenResult.token,
       },
     });
   } catch (error) {
-    console.log(error);
     dispatch({
       type: USER_LOGIN_FAIL,
       payload: 'Identifiant ou mot de passe incorrect!',
@@ -69,11 +68,11 @@ export const loginWithGoogle = () => async (dispatch) => {
     dispatch({
       type: USER_LOGIN_SUCCESS,
       payload: {
-        email: res.data.email,
-        displayName: res.data.displayName,
-        photoURL: res.data.photoURL,
-        role: res.data.role,
-        _id: res.data._id,
+        email: res?.data?.email,
+        displayName: res?.data?.displayName,
+        photoURL: res?.data?.photoURL,
+        role: res?.data?.role,
+        _id: res?.data?._id,
         token: idTokenResult.token,
       },
     });
@@ -84,76 +83,75 @@ export const loginWithGoogle = () => async (dispatch) => {
     });
   }
 };
-export const registerUser = (displayName, password, email) => async (
-  dispatch
-) => {
-  dispatch({
-    type: USER_REGISTER_REQUEST,
-  });
-  try {
-    const signInRes = await auth.signInWithEmailLink(
-      email,
-      window.location.href
-    );
-    if (signInRes.user.emailVerified) {
-      localStorage.removeItem('userRegistrationEmail');
-      const currentUser = auth.currentUser;
-      await currentUser.updatePassword(password);
-      currentUser
-        .updateProfile({
-          displayName,
-          photoURL: signInRes.user.photoURL
-            ? signInRes.user.photoURL
-            : generateGravatar(email),
-        })
-        .then(
-          async () => {
-            const idTokenResult = await currentUser.getIdTokenResult(true);
-            const res = await axios.post(
-              '/api/v1/auth',
-              {},
-              {
-                headers: {
-                  Authorization: idTokenResult.token,
-                },
-              }
-            );
-            dispatch({
-              type: USER_REGISTER_SUCCESS,
-              payload: {
-                email: res.data.email,
-                displayName: res.data.displayName,
-                photoURL: res.data.photoURL,
-                role: res.data.role,
-                _id: res.data._id,
-                token: idTokenResult.token,
-              },
-            });
-            dispatch({
-              type: USER_LOGIN_SUCCESS,
-              payload: {
-                email: res.data.email,
-                displayName: res.data.displayName,
-                photoURL: res.data.photoURL,
-                role: res.data.role,
-                _id: res.data._id,
-                token: idTokenResult.token,
-              },
-            });
-          },
-          (error) => {
-            throw error;
-          }
-        );
-    }
-  } catch (err) {
-    console.log(err);
+export const registerUser =
+  (displayName, password, email) => async (dispatch) => {
     dispatch({
-      type: USER_REGISTER_FAIL,
-      payload: "Une erreur s'est produite. Veuillez réessayer",
+      type: USER_REGISTER_REQUEST,
     });
-  }
-};
+    try {
+      const signInRes = await auth.signInWithEmailLink(
+        email,
+        window.location.href
+      );
+      if (signInRes.user.emailVerified) {
+        localStorage.removeItem('userRegistrationEmail');
+        const currentUser = auth.currentUser;
+        await currentUser.updatePassword(password);
+        currentUser
+          .updateProfile({
+            displayName,
+            photoURL: signInRes.user.photoURL
+              ? signInRes.user.photoURL
+              : generateGravatar(email),
+          })
+          .then(
+            async () => {
+              const idTokenResult = await currentUser.getIdTokenResult(true);
+              const res = await axios.post(
+                '/api/v1/auth',
+                {},
+                {
+                  headers: {
+                    Authorization: idTokenResult.token,
+                  },
+                }
+              );
+              dispatch({
+                type: USER_REGISTER_SUCCESS,
+                payload: {
+                  email: res?.data.email,
+                  displayName: res?.data.displayName,
+                  photoURL: res?.data.photoURL,
+                  role: res?.data.role,
+                  _id: res?.data._id,
+                  token: idTokenResult.token,
+                },
+              });
+              dispatch({
+                type: USER_LOGIN_SUCCESS,
+                payload: {
+                  email: res?.data.email,
+                  displayName: res?.data.displayName,
+                  photoURL: res?.data.photoURL,
+                  role: res?.data.role,
+                  _id: res?.data._id,
+                  token: idTokenResult.token,
+                },
+              });
+            },
+            (error) => {
+              throw error;
+            }
+          );
+      }
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: USER_REGISTER_FAIL,
+        payload: "Une erreur s'est produite. Veuillez réessayer",
+      });
+    }
+  };
 export const getCurrentUser = (token) => async (dispatch) => {
   try {
     const res = await axios.get('/api/v1/auth/current', {
@@ -164,18 +162,21 @@ export const getCurrentUser = (token) => async (dispatch) => {
     dispatch({
       type: USER_LOGIN_SUCCESS,
       payload: {
-        email: res.data.email,
-        displayName: res.data.displayName,
-        photoURL: res.data.photoURL,
-        role: res.data.role,
-        _id: res.data._id,
+        email: res?.data?.email,
+        displayName: res?.data?.displayName,
+        photoURL: res?.data?.photoURL,
+        role: res?.data?.role,
+        _id: res?.data?._id,
         token,
       },
     });
   } catch (error) {
     dispatch({
       type: USER_LOGIN_FAIL,
-      payload: error,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
     });
   }
 };

@@ -34,9 +34,11 @@
     "react-multi-select-component": "^4.0.1",
     "react-responsive-carousel": "^3.2.18",
     "react-scripts": "4.0.3",
+    "react-star-ratings": "^2.3.0",
     "react-toastify": "^7.0.4",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
+    "slugify": "^1.5.3",
     "uuid": "^8.3.2",
     "web-vitals": "^1.1.1",
     "yup": "^0.32.9"

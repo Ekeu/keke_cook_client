@@ -32,7 +32,9 @@ const NewProducts = () => {
         headline='Nouveaux Produits'
         loading={loading}
         products={products}
-        pages={pages}
+        showPagination
+        showHeadline
+        pages={(pages / 3) * 2}
         page={page}
         setPageNumber={setPageNumber}
       ></HeadlineAndProducts>

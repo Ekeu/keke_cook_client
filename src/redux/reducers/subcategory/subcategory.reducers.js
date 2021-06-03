@@ -20,7 +20,10 @@ import {
   SUBCATEGORY_UPDATE_RESET,
 } from './subcategory.types';
 
-export const subcategoryListReducer = (state = { subcategories: [] }, action) => {
+export const subcategoryListReducer = (
+  state = { subcategories: [] },
+  action
+) => {
   switch (action.type) {
     case SUBCATEGORY_LIST_REQUEST:
       return { loading: true, subcategories: [] };
@@ -36,12 +39,19 @@ export const subcategoryListReducer = (state = { subcategories: [] }, action) =>
   }
 };
 
-export const subcategoryDetailsReducer = (state = { subcategory: {} }, action) => {
+export const subcategoryDetailsReducer = (
+  state = { subcategory: {} },
+  action
+) => {
   switch (action.type) {
     case SUBCATEGORY_DETAILS_REQUEST:
       return { loading: true, ...state };
     case SUBCATEGORY_DETAILS_SUCCESS:
-      return { loading: false, subcategory: action.payload };
+      return {
+        loading: false,
+        subcategory: action.payload.subcategory,
+        products: action.payload.products,
+      };
     case SUBCATEGORY_DETAILS_FAIL:
       return { loading: false, error: action.payload };
     case SUBCATEGORY_DETAILS_RESET:
@@ -81,7 +91,10 @@ export const subcategoryCreateReducer = (state = {}, action) => {
   }
 };
 
-export const subcategoryUpdateReducer = (state = { subcategory: {} }, action) => {
+export const subcategoryUpdateReducer = (
+  state = { subcategory: {} },
+  action
+) => {
   switch (action.type) {
     case SUBCATEGORY_UPDATE_REQUEST:
       return { loading: true };

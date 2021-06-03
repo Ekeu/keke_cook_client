@@ -45,7 +45,7 @@ const Notification = ({
           <div className='ml-4 flex-shrink-0 flex'>
             <button
               onClick={closeToast}
-              className='bg-white rounded-md inline-flex text-blue-gray-400 hover:text-blue-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+              className='bg-white rounded-md inline-flex text-blue-gray-400 hover:text-blue-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-500'
             >
               <span className='sr-only'>Close</span>
               <XIcon className='h-5 w-5' aria-hidden='true' />

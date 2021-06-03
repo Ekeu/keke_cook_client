@@ -1,11 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { Image } from 'cloudinary-react';
 
-const ChooseCategory = ({ public_id, category }) => {
+const ChooseCategory = ({ public_id, category, url }) => {
   return (
     <li>
-      <div className='space-y-4'>
+      <Link to={url} className='space-y-4'>
         <div className='aspect-w-3 aspect-h-2'>
           <Image
             className='object-cover shadow-lg rounded-lg'
@@ -24,7 +25,7 @@ const ChooseCategory = ({ public_id, category }) => {
             </h3>
           </div>
         </div>
-      </div>
+      </Link>
     </li>
   );
 };

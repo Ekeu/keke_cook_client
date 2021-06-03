@@ -17,10 +17,12 @@ import History from './pages/user/history.page.jsx';
 import Password from './pages/user/password.page.jsx';
 import WishList from './pages/user/wish-list.page.jsx';
 import AdminDashboard from './pages/admin/dashboard.page.jsx';
-import Category from './pages/admin/category/category.page.jsx';
-import Subcategory from './pages/admin/subcategory/subcategory.page.jsx';
-import CreateProduct from './pages/admin/product/product.page.jsx';
+import AdminCategory from './pages/admin/category/category.page.jsx';
+import AdminSubcategory from './pages/admin/subcategory/subcategory.page.jsx';
+import AdminProduct from './pages/admin/product/product.page.jsx';
 import Product from './pages/product/product.page.jsx';
+import Category from './pages/category/category.page.jsx';
+import Subcategory from './pages/subcategory/subcategory.page.jsx';
 import ProductUpdate from './pages/admin/product-update/product-update.page.jsx';
 import Products from './pages/admin/products/products.page.jsx';
 
@@ -59,6 +61,8 @@ const App = () => {
         <Route exact path='/register/finish' component={FinishRegistration} />
         <Route exact path='/password/new' component={ForgotPassword} />
         <Route exact path='/product/:slug' component={Product} />
+        <Route exact path='/categories/:slug' component={Category} />
+        <Route exact path='/scategories/:slug' component={Subcategory} />
         <UserRoute exact path='/me/account' component={History} />
         <UserRoute exact path='/me/password/update' component={Password} />
         <UserRoute exact path='/me/wishlist' component={WishList} />
@@ -72,17 +76,17 @@ const App = () => {
         <AdminRoute
           exact
           path='/admin/products/categories'
-          component={Category}
+          component={AdminCategory}
         />
         <AdminRoute
           exact
           path='/admin/products/subcategories'
-          component={Subcategory}
+          component={AdminSubcategory}
         />
         <AdminRoute
           exact
           path='/admin/products/add'
-          component={CreateProduct}
+          component={AdminProduct}
         />
       </Switch>
       <Footer />
