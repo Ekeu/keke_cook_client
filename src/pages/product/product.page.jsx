@@ -1,31 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Carousel } from 'react-responsive-carousel';
-import MultiSelect from 'react-multi-select-component';
 import { ShoppingCartIcon } from '@heroicons/react/solid';
 import { HeartIcon } from '@heroicons/react/outline';
+import { toast } from 'react-toastify';
 
 import { ContentState } from 'draft-js';
 import htmlToDraft from 'html-to-draftjs';
 import { convertToHTML } from 'draft-convert';
 import DOMPurify from 'dompurify';
 
-import Rating from '../../components/rating/rating.component';
-import Loader from '../../components/loader/loader.component';
 import ProductNoImage from '../../components/product-image/product-no-image.component';
-import Select from '../../components/select/select.component';
 import CustomButton from '../../components/custom-button/custom-button.component.jsx';
 import SlideOver from '../../components/slide-over/slide-over.component.jsx';
 import CupcakePage from '../../components/product-types/cupcake/cupcake-page.component';
 import NumberLetterCakePage from '../../components/product-types/number-letter-cake/number-letter-cake-page.component';
 import MacaronPage from '../../components/product-types/macaron/macaron-page.component';
 import BrowniePage from '../../components/product-types/brownie/brownie-page.component';
+import Notification from '../../components/notification/notification.component.jsx';
+import ProductRating from '../../components/product-rating/product-rating.component.jsx';
+import StarRatingModal from '../../components/star-rating/star-rating.component.jsx';
+import RelatedProducts from '../../components/related-products/related-products.component.jsx';
+import ProductCatSub from '../../components/product-cat-and-sub/product-cat-and-sub.component';
 
-import { listProductDetails } from '../../redux/reducers/product/product.actions';
-
-import { currencyFormatter } from '../../utils/functions';
+import {
+  listProductDetails,
+  createProductReview,
+} from '../../redux/reducers/product/product.actions';
+import { PRODUCT_CREATE_REVIEW_RESET } from '../../redux/reducers/product/product.types';
 
 import { MULTISELECT_INTERNATIONALIZATION } from '../../constants/admin.product.constants';
+import { PRODUCT_PAGE_SVG_PATTERN } from '../../constants/product-page.constants';
 
 import { ArrowRenderer, CustomClearIcon } from '../../utils/components';
 
@@ -35,12 +40,24 @@ const Product = ({ history, match }) => {
   const dispatch = useDispatch();
 
   const productDetails = useSelector((state) => state.productDetails);
-  const { loading, error, product } = productDetails;
+  const { product } = productDetails;
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+  const productCreateReview = useSelector((state) => state.productCreateReview);
+  const {
+    loading: loadingProductReview,
+    success: successProductReview,
+    error: errorProductReview,
+  } = productCreateReview;
 
   //Product
   const [price, setPrice] = useState(1);
+
+  //Rating modal
+  const [openRatingModal, setOpenRatingModal] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [projectRated, setProjectRated] = useState('');
+  const cancelButtonRef = useRef();
 
   //Slide Over
   const [openSlideOver, setOpenSlideOver] = useState(false);
@@ -101,57 +118,124 @@ const Product = ({ history, match }) => {
     useState('');
   const [numberOfNumbersOrLetters, setNumberOfNumbersOrLetters] = useState('');
   const [numberOfFlavors, setNumberOfFlavors] = useState('');
+  //End Number/Letter Cake
+
+  const disableRemainingToppings = (slectedToppings, toppings) => {
+    return toppings.map((topping) => {
+      const key = Object.keys(topping)[0];
+      return (
+        (topping.disabled = !slectedToppings.some(
+          (selectedTopping) =>
+            key in selectedTopping && selectedTopping[key] === topping[key]
+        )),
+        topping
+      );
+    });
+  };
+
+  const submitRating = () => {
+    dispatch(createProductReview(projectRated, rating));
+  };
+
+  const cancelRating = () => {
+    setOpenRatingModal(false);
+  };
+
+  const handleRatingModal = () => {
+    if (userInfo?.token) {
+      setOpenRatingModal(true);
+    } else {
+      toast(
+        <Notification warning headline='Hmmmm...'>
+          Vous devez être connecté pour soumettre un retour!
+        </Notification>
+      );
+      history.push({
+        pathname: '/login',
+        state: { from: `/product/${product?.slug}` },
+      });
+    }
+  };
+
+  const changeRating = (newRating, name) => {
+    setRating(newRating);
+    setProjectRated(name);
+  };
 
   useEffect(() => {
-    if (!product || !product.title || product.slug !== match.params.slug) {
-      dispatch(listProductDetails(match.params.slug));
-    } else {
-      if (product?.productType === 'Cupcake') {
-        setCupcakeShares([
-          ...product?.productSpecifics?.shares?.map((ps) => ({
-            ...ps.share,
-            price: ps.price,
-          })),
-        ]);
-        setCupcakeCakes([...product?.productSpecifics.cakes]);
-        setCupcakeFodders([...product?.productSpecifics.fodders]);
-        setCupcakeCreamColors([...product?.productSpecifics.creamColors]);
-      }
-      if (product?.productType === 'Macaron') {
-        setMacaronShares([
-          ...product?.productSpecifics?.shares?.map((ps) => ({
-            ...ps.share,
-            price: ps.price,
-          })),
-        ]);
-        setMacaronShellColors([...product?.productSpecifics.shellColors]);
-        setMacaronFodders([...product?.productSpecifics.fodders]);
-      }
-      if (
-        product.productType === 'Number Cake' ||
-        product.productType === 'Letter Cake'
-      ) {
-        setNumberLetterCakeShares([
-          ...product?.productSpecifics?.shares?.map((ps) => ({
-            ...ps.share,
-            price: ps.price,
-          })),
-        ]);
-        setNumberLetterCakeBiscuits([...product?.productSpecifics.biscuits]);
-        setNumberLetterCakeCreams([...product?.productSpecifics.creams]);
-        setNumberLetterCakeToppings([...product?.productSpecifics.toppings]);
-        setNumberOfNumbersOrLetters(
-          product?.productSpecifics.numberOfNumbersOrLetters
-        );
-        setNumberOfFlavors(product?.productSpecifics.numberOfFlavors);
-      }
+    dispatch(listProductDetails(match.params.slug));
+    if (successProductReview) {
+      toast(
+        <Notification success headline='Merci!'>
+          Votre retour à bien été pris en compte
+        </Notification>
+      );
+
+      setProjectRated('');
+      setOpenRatingModal(false);
+      dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
     }
-  }, [dispatch, match, product]);
+    if (errorProductReview) {
+      toast(
+        <Notification error headline='Erreur!'>
+          {errorProductReview}
+        </Notification>
+      );
+      setProjectRated('');
+      setOpenRatingModal(false);
+      dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
+    }
+    if (product?.productType === 'Cupcake') {
+      setCupcakeShares([
+        ...product?.productSpecifics?.shares?.map((ps) => ({
+          ...ps.share,
+          price: ps.price,
+        })),
+      ]);
+      setCupcakeCakes([...product?.productSpecifics.cakes]);
+      setCupcakeFodders([...product?.productSpecifics.fodders]);
+      setCupcakeCreamColors([...product?.productSpecifics.creamColors]);
+    }
+    if (product?.productType === 'Macaron') {
+      setMacaronShares([
+        ...product?.productSpecifics?.shares?.map((ps) => ({
+          ...ps.share,
+          price: ps.price,
+        })),
+      ]);
+      setMacaronShellColors([...product?.productSpecifics.shellColors]);
+      setMacaronFodders([...product?.productSpecifics.fodders]);
+    }
+    if (
+      product?.productType === 'Number Cake' ||
+      product?.productType === 'Letter Cake'
+    ) {
+      setNumberLetterCakeShares([
+        ...product?.productSpecifics?.shares?.map((ps) => ({
+          ...ps.share,
+          price: ps.price,
+        })),
+      ]);
+      setNumberLetterCakeBiscuits([...product?.productSpecifics.biscuits]);
+      setNumberLetterCakeCreams([...product?.productSpecifics.creams]);
+      setNumberOfNumbersOrLetters(
+        product?.productSpecifics.numberOfNumbersOrLetters
+      );
+      setNumberOfFlavors(product?.productSpecifics.numberOfFlavors);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    dispatch,
+    match,
+    product?.productType,
+    successProductReview,
+    errorProductReview,
+  ]);
 
   useEffect(() => {
     if (
-      product.productType === 'Number Cake' ||
-      product.productType === 'Letter Cake'
+      product?.productType === 'Number Cake' ||
+      product?.productType === 'Letter Cake'
     ) {
       if (numberLetterCakeShares?.length > 0) {
         setNumberLetterCakeShare(numberLetterCakeShares[0]);
@@ -204,8 +288,20 @@ const Product = ({ history, match }) => {
     macaronShares,
     macaronShellColors,
     macaronFodders,
-    product,
+    product?.productType,
   ]);
+
+  useEffect(() => {
+    const setUserRating = () => {
+      if (product?.ratings && userInfo?.token) {
+        const userReview = product?.ratings.find(
+          (review) => review.user.toString() === userInfo._id.toString()
+        );
+        userReview && setRating(userReview?.rating);
+      }
+    };
+    setUserRating();
+  }, [product?.ratings, userInfo?._id, userInfo?.token]);
 
   useEffect(() => {
     if (product?.productType === 'Cupcake') {
@@ -215,25 +311,13 @@ const Product = ({ history, match }) => {
       setPrice(Number(macaronShare?.price));
     }
     if (
-      product.productType === 'Number Cake' ||
-      product.productType === 'Letter Cake'
+      product?.productType === 'Number Cake' ||
+      product?.productType === 'Letter Cake'
     ) {
       setPrice(Number(numberLetterCakeShare?.price));
     }
-  }, [cupcakeShare, numberLetterCakeShare, macaronShare, product]);
+  }, [cupcakeShare, numberLetterCakeShare, macaronShare, product?.productType]);
 
-  const disableRemainingToppings = (slectedToppings, toppings) => {
-    return toppings.map((topping) => {
-      const key = Object.keys(topping)[0];
-      return (
-        (topping.disabled = !slectedToppings.some(
-          (selectedTopping) =>
-            key in selectedTopping && selectedTopping[key] === topping[key]
-        )),
-        topping
-      );
-    });
-  };
   useEffect(() => {
     if (numberLetterCakeSelectedToppings.length === 3) {
       setNumberLetterCakeToppings([
@@ -244,9 +328,9 @@ const Product = ({ history, match }) => {
       ]);
     } else {
       if (
-        product._id &&
-        (product.productType === 'Number Cake' ||
-          product.productType === 'Letter Cake')
+        product?._id &&
+        (product?.productType === 'Number Cake' ||
+          product?.productType === 'Letter Cake')
       ) {
         setNumberLetterCakeToppings([
           ...product?.productSpecifics?.toppings?.map((pt) => ({
@@ -265,9 +349,9 @@ const Product = ({ history, match }) => {
       ]);
     } else {
       if (
-        product._id &&
-        (product.productType === 'Number Cake' ||
-          product.productType === 'Letter Cake')
+        product?._id &&
+        (product?.productType === 'Number Cake' ||
+          product?.productType === 'Letter Cake')
       ) {
         setNumberLetterCakeToppings2([
           ...product?.productSpecifics?.toppings?.map((pt) => ({
@@ -282,7 +366,7 @@ const Product = ({ history, match }) => {
         ...disableRemainingToppings(cupcakeSelectedToppings, cupcakeToppings),
       ]);
     } else {
-      if (product._id && product?.productType === 'Cupcake') {
+      if (product?._id && product?.productType === 'Cupcake') {
         setCupcakeToppings([
           ...product?.productSpecifics?.toppings?.map((pt) => ({
             ...pt,
@@ -296,7 +380,7 @@ const Product = ({ history, match }) => {
         ...disableRemainingToppings(cupcakeSelectedToppings2, cupcakeToppings2),
       ]);
     } else {
-      if (product._id && product?.productType === 'Cupcake') {
+      if (product?._id && product?.productType === 'Cupcake') {
         setCupcakeToppings2([
           ...product?.productSpecifics?.toppings?.map((pt) => ({
             ...pt,
@@ -311,7 +395,7 @@ const Product = ({ history, match }) => {
       ]);
     } else {
       if (
-        product._id &&
+        product?._id &&
         product?.productType === 'Brownie' &&
         product?.productSpecifics?.toppings.length > 0
       ) {
@@ -362,38 +446,7 @@ const Product = ({ history, match }) => {
               className='hidden sm:block lg:absolute lg:inset-y-0 lg:right-0 lg:w-screen'
             >
               <div className='absolute inset-y-0 right-1/2 w-full bg-gray-50 rounded-r-3xl lg:right-72' />
-              <svg
-                className='absolute top-8 left-1/2 -ml-3 lg:-right-8 lg:left-auto lg:top-12'
-                width={404}
-                height={392}
-                fill='none'
-                viewBox='0 0 404 392'
-              >
-                <defs>
-                  <pattern
-                    id='02f20b47-fd69-4224-a62a-4c9de5c763f7'
-                    x={0}
-                    y={0}
-                    width={20}
-                    height={20}
-                    patternUnits='userSpaceOnUse'
-                  >
-                    <rect
-                      x={0}
-                      y={0}
-                      width={4}
-                      height={4}
-                      className='text-gray-200'
-                      fill='currentColor'
-                    />
-                  </pattern>
-                </defs>
-                <rect
-                  width={404}
-                  height={392}
-                  fill='url(#02f20b47-fd69-4224-a62a-4c9de5c763f7)'
-                />
-              </svg>
+              {PRODUCT_PAGE_SVG_PATTERN}
             </div>
             <div className='relative mx-auto max-w-md px-4 sm:max-w-3xl sm:px-6 lg:px-0 lg:max-w-none lg:py-20'>
               {product?.images?.length > 0 ? (
@@ -426,6 +479,11 @@ const Product = ({ history, match }) => {
               <h2 className='mt-4 text-2xl text-rose-500 font-extrabold font-poppins tracking-tight sm:text-3xl'>
                 {product?.price}
               </h2>
+              <ProductRating
+                handleRatingModal={handleRatingModal}
+                productId={product?._id}
+                ratings={product?.ratings}
+              />
               <div
                 className='mt-6 text-blue-gray-500 font-hind space-y-6'
                 dangerouslySetInnerHTML={createMarkup(convertedContent)}
@@ -531,17 +589,18 @@ const Product = ({ history, match }) => {
                 />
               )}
 
-              {product?.productType === 'Brownie' && brownieToppings.length > 0 && (
-                <BrowniePage
-                  brownieToppings={brownieToppings}
-                  brownieSelectedToppings={brownieSelectedToppings}
-                  setBrownieSelectedToppings={setBrownieSelectedToppings}
-                  overrideStrings={MULTISELECT_INTERNATIONALIZATION}
-                  ArrowRenderer={ArrowRenderer}
-                  ClearIcon={<CustomClearIcon />}
-                  ClearSelectedIcon={<CustomClearIcon />}
-                />
-              )}
+              {product?.productType === 'Brownie' &&
+                brownieToppings.length > 0 && (
+                  <BrowniePage
+                    brownieToppings={brownieToppings}
+                    brownieSelectedToppings={brownieSelectedToppings}
+                    setBrownieSelectedToppings={setBrownieSelectedToppings}
+                    overrideStrings={MULTISELECT_INTERNATIONALIZATION}
+                    ArrowRenderer={ArrowRenderer}
+                    ClearIcon={<CustomClearIcon />}
+                    ClearSelectedIcon={<CustomClearIcon />}
+                  />
+                )}
 
               <div className='mt-10'>
                 <CustomButton
@@ -566,62 +625,27 @@ const Product = ({ history, match }) => {
                   Ajouter à la liste de souhaits
                 </CustomButton>
               </div>
-
-              <div className='mt-6 border-t border-blue-gray-200 py-6 space-y-6'>
-                <div>
-                  <h2 className='text-sm font-medium text-blue-gray-500 uppercase font-hind tracking-tight'>
-                    Catégorie
-                  </h2>
-                  <div className='mt-2 leading-8'>
-                    <span className='inline'>
-                      <a
-                        href='#'
-                        className='capitalize relative inline-flex items-center rounded-full border border-blue-gray-300 px-3 py-0.5'
-                      >
-                        <div className='absolute flex-shrink-0 flex items-center justify-center'>
-                          <span
-                            className='h-1.5 w-1.5 rounded-full bg-violet-600'
-                            aria-hidden='true'
-                          />
-                        </div>
-                        <div className='ml-3.5 text-sm font-medium text-blue-gray-800'>
-                          {product?.category?.name}
-                        </div>
-                      </a>{' '}
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <h2 className='text-sm font-medium text-blue-gray-500 uppercase font-hind tracking-tight'>
-                    Sous Catégories
-                  </h2>
-                  <ul className='mt-2 leading-8'>
-                    {product?.subcategories?.map((sc) => (
-                      <li className='inline' key={sc._id}>
-                        <a
-                          href='#'
-                          className='capitalize relative inline-flex items-center rounded-full border border-blue-gray-300 px-3 py-0.5'
-                        >
-                          <div className='absolute flex-shrink-0 flex items-center justify-center'>
-                            <span
-                              className='h-1.5 w-1.5 rounded-full bg-rose-500'
-                              aria-hidden='true'
-                            />
-                          </div>
-                          <div className='ml-3.5 text-sm font-medium text-blue-gray-900'>
-                            {sc?.name}
-                          </div>
-                        </a>{' '}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+              <ProductCatSub
+                category={product?.category}
+                subcategories={product?.subcategories}
+              />
             </div>
           </div>
         </div>
+        <RelatedProducts />
       </div>
       <SlideOver open={openSlideOver} setOpen={setOpenSlideOver} />
+      <StarRatingModal
+        openRating={openRatingModal}
+        setOpenRating={setOpenRatingModal}
+        onSubmit={submitRating}
+        onCancel={cancelRating}
+        cancelRef={cancelButtonRef}
+        loading={loadingProductReview}
+        productId={product?._id}
+        rating={rating}
+        changeRating={changeRating}
+      />
     </>
   );
 };

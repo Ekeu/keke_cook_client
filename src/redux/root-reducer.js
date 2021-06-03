@@ -22,11 +22,13 @@ import {
 import {
   productCreateReducer,
   productListReducer,
+  productListRelatedReducer,
   productDeleteReducer,
   productDetailsReducer,
   productUpdateReducer,
   productSortNewReducer,
   productSortSoldReducer,
+  productCreateReviewReducer
 } from './reducers/product/product.reducers';
 
 const rootReducer = combineReducers({
@@ -45,11 +47,13 @@ const rootReducer = combineReducers({
   subcategoryUpdate: subcategoryUpdateReducer,
   productCreate: productCreateReducer,
   productList: productListReducer,
+  productListRelated: productListRelatedReducer,
   productDelete: productDeleteReducer,
   productDetails: productDetailsReducer,
   productUpdate: productUpdateReducer,
   productSortNew: productSortNewReducer,
   productSortSold: productSortSoldReducer,
+  productCreateReview: productCreateReviewReducer,
 });
 
 export default rootReducer;

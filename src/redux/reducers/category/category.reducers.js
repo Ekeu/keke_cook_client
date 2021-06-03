@@ -40,7 +40,10 @@ export const categoryListReducer = (state = { categories: [] }, action) => {
   }
 };
 
-export const categorySubcategoriesListReducer = (state = { subcategories: [] }, action) => {
+export const categorySubcategoriesListReducer = (
+  state = { subcategories: [] },
+  action
+) => {
   switch (action.type) {
     case CATEGORY_SUBCATEGORIES_LIST_REQUEST:
       return { loading: true, subcategories: [] };
@@ -62,7 +65,11 @@ export const categoryDetailsReducer = (state = { category: {} }, action) => {
     case CATEGORY_DETAILS_REQUEST:
       return { loading: true, ...state };
     case CATEGORY_DETAILS_SUCCESS:
-      return { loading: false, category: action.payload };
+      return {
+        loading: false,
+        category: action.payload.category,
+        products: action.payload.products,
+      };
     case CATEGORY_DETAILS_FAIL:
       return { loading: false, error: action.payload };
     case CATEGORY_DETAILS_RESET:

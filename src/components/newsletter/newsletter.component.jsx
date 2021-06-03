@@ -1,23 +1,8 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
 import MailchimpSubscribe from 'react-mailchimp-subscribe';
-
-import FormInput from '../form-input/form-input.component.jsx';
-import Notification from '../notification/notification.component.jsx';
 import NewsLetterForm from '../newsletter/newsletter-form.component';
-import CustomButton from '../custom-button/custom-button.component.jsx';
 
 const Newsletter = () => {
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm();
-
-  const onSubmit = handleSubmit(async ({ ctaEmail }) => {
-    //
-  });
   return (
     <div className='bg-white py-16 sm:py-24'>
       <div className='relative sm:py-16'>

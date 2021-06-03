@@ -91,6 +91,7 @@ const CupcakePage = ({
           </label>
           <MultiSelect
             options={cupcakeToppings}
+            hasSelectAll={false}
             value={cupcakeSelectedToppings}
             overrideStrings={overrideStrings}
             onChange={setCupcakeSelectedToppings}
@@ -133,6 +134,7 @@ const CupcakePage = ({
           </label>
           <MultiSelect
             options={cupcakeToppings2}
+            hasSelectAll={false}
             value={cupcakeSelectedToppings2}
             overrideStrings={overrideStrings}
             onChange={setCupcakeSelectedToppings2}

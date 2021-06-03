@@ -98,6 +98,7 @@ const NumberLetterCakePage = ({
           <MultiSelect
             options={numberLetterCakeToppings}
             value={numberLetterCakeSelectedToppings}
+            hasSelectAll={false}
             overrideStrings={overrideStrings}
             onChange={setNumberLetterCakeSelectedToppings}
             ArrowRenderer={ArrowRenderer}
@@ -133,6 +134,7 @@ const NumberLetterCakePage = ({
             <MultiSelect
               options={numberLetterCakeToppings2}
               value={numberLetterCakeSelectedToppings2}
+              hasSelectAll={false}
               overrideStrings={overrideStrings}
               onChange={setNumberLetterCakeSelectedToppings2}
               ArrowRenderer={ArrowRenderer}

@@ -19,6 +19,7 @@ const BrowniePage = ({
           </label>
           <MultiSelect
             options={brownieToppings}
+            hasSelectAll={false}
             value={brownieSelectedToppings}
             overrideStrings={overrideStrings}
             onChange={setBrownieSelectedToppings}
