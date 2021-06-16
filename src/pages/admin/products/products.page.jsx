@@ -58,7 +58,7 @@ const Products = ({ history }) => {
     if (userInfo?.role !== 'admin') {
       history.push('/login');
     } else {
-      dispatch(listProducts(10));
+      dispatch(listProducts());
     }
     if (error) {
       toast(

@@ -34,7 +34,7 @@ const NewProducts = () => {
         products={products}
         showPagination
         showHeadline
-        pages={(pages / 3) * 2}
+        pages={Math.ceil((pages / 3) * 2)}
         page={page}
         setPageNumber={setPageNumber}
       ></HeadlineAndProducts>

@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { Highlight } from 'react-instantsearch-dom';
+
 import Rating from '../rating/rating.component';
 
 import NoImage from '../../assets/images/no-product-image.png';
 
-const ProductCard = ({
-  product: { slug, title, images, category, price, ratings },
-}) => {
+const ProductCard = ({ product, ap }) => {
+  const { slug, title, images, category, price, ratings } = product;
   return (
     <div className='space-y-4'>
       <div>
@@ -29,7 +30,7 @@ const ProductCard = ({
             </div>
             <Link to={`/product/${slug}`}>
               <h4 className='mt-1 font-semibold font-hind text-blue-gray-800 text-lg leading-snug truncate'>
-                {title}
+                {ap ? <Highlight attribute='title' hit={product} /> : title }
               </h4>
             </Link>
             <div className='mt-1 font-poppins text-blue-gray-800'>{price}</div>

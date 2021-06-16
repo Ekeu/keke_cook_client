@@ -29,6 +29,10 @@ module.exports = {
         '2/3': '66.666667%',
         '5/6': '83.333333%',
       },
+      transitionDelay: {
+        0: '0ms',
+        2000: '2000ms',
+      },
     },
   },
   variants: {
