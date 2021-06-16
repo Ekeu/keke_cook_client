@@ -31,7 +31,7 @@ const TopProducts = () => {
       headline='Meilleures Ventes'
       loading={loading}
       products={products}
-      pages={(pages / 3) * 2}
+      pages={Math.ceil((pages / 3) * 2)}
       page={page}
       showPagination
       showHeadline

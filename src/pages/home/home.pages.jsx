@@ -64,6 +64,7 @@ const Home = () => {
               <ul className='space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:grid-cols-2 lg:gap-x-8'>
                 {categories.map((category, index) => (
                   <ChooseCategory
+                    key={publicIds[index]}
                     public_id={publicIds[index]}
                     category={category?.name}
                     url={`/categories/${category?.slug}`}

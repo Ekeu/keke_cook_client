@@ -92,6 +92,7 @@ const ProductUpdate = ({ match, history }) => {
     EditorState.createEmpty()
   );
   const [images, setImages] = useState([]);
+  const [rangePrice, setRangePrice] = useState(0);
   const [convertedContent, setConvertedContent] = useState(null);
 
   //Cupcake Component State
@@ -243,6 +244,9 @@ const ProductUpdate = ({ match, history }) => {
           price: productInputPrice
             ? currencyFormatter(productInputPrice)
             : productPrice,
+          range_price: productInputPrice
+            ? Number(productInputPrice)
+            : rangePrice,
           shipping: selectedShipping.name,
           productType: selectedType.name,
           color: selectedColor.name,
@@ -346,15 +350,18 @@ const ProductUpdate = ({ match, history }) => {
           contentBlocks,
           entityMap
         );
+        setRangePrice(product?.range_price);
         setEditorState(EditorState.createWithContent(contentState));
-        setConvertedContent(EditorState.createWithContent(contentState).getCurrentContent())
+        setConvertedContent(
+          convertToHTML(EditorState.createWithContent(contentState).getCurrentContent())
+        );
         if (
           product.productType !== 'Brownie' &&
           product.productType !== 'Gateau Nature'
         ) {
           setValue('productPrice', product.price);
         } else {
-          setValue('productInputPrice', product.price);
+          setValue('productInputPrice', product?.productSpecifics?.price);
         }
         setSelectedShipping(
           PRODUCT_SHIPPING.find((ps) => ps.name === product.shipping)
@@ -434,10 +441,10 @@ const ProductUpdate = ({ match, history }) => {
    */
   useEffect(() => {
     if (successList) {
-      setSelectedCategory(categories[0]);
-      dispatch(getSubcategoriesFromCategory(categories[0]._id));
+      setSelectedCategory(product?.category);
+      dispatch(getSubcategoriesFromCategory(product?.category?._id));
     }
-  }, [categories, successList, dispatch]);
+  }, [product, successList, dispatch]);
 
   /**
    * Use Effect to update the price input field based on the price of the entered shares
@@ -466,6 +473,7 @@ const ProductUpdate = ({ match, history }) => {
           Math.max(...priceArray)
         )}`
       );
+      setRangePrice(Math.max(...priceArray));
     }
   }, [
     cupcakeShares,

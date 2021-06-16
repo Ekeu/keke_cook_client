@@ -101,6 +101,7 @@ const Product = ({ history }) => {
     EditorState.createEmpty()
   );
   const [images, setImages] = useState([]);
+  const [rangePrice, setRangePrice] = useState(0);
   const [convertedContent, setConvertedContent] = useState(null);
 
   //Cupcake Component State
@@ -177,7 +178,7 @@ const Product = ({ history }) => {
       productPrice,
       productInputPrice,
       numberOfNumbersOrLetters,
-      numberOfFlavors
+      numberOfFlavors,
     }) => {
       let productSpecifics;
       if (selectedType.name === 'Cupcake') {
@@ -240,6 +241,7 @@ const Product = ({ history }) => {
           price: productInputPrice
             ? currencyFormatter(productInputPrice)
             : productPrice,
+          range_price: productInputPrice ? productInputPrice : rangePrice,
           shipping: selectedShipping.name,
           productType: selectedType.name,
           color: selectedColor.name,
@@ -370,6 +372,7 @@ const Product = ({ history }) => {
           Math.max(...priceArray)
         )}`
       );
+      setRangePrice(Math.max(...priceArray));
     }
   }, [
     cupcakeShares,

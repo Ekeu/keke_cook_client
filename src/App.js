@@ -24,7 +24,8 @@ import Product from './pages/product/product.page.jsx';
 import Category from './pages/category/category.page.jsx';
 import Subcategory from './pages/subcategory/subcategory.page.jsx';
 import ProductUpdate from './pages/admin/product-update/product-update.page.jsx';
-import Products from './pages/admin/products/products.page.jsx';
+import AdminProducts from './pages/admin/products/products.page.jsx';
+import Products from './pages/products/products.page';
 
 import Header from './components/header/header.component';
 
@@ -60,6 +61,7 @@ const App = () => {
         <Route exact path='/register' component={Register} />
         <Route exact path='/register/finish' component={FinishRegistration} />
         <Route exact path='/password/new' component={ForgotPassword} />
+        <Route exact path='/products' component={Products} />
         <Route exact path='/product/:slug' component={Product} />
         <Route exact path='/categories/:slug' component={Category} />
         <Route exact path='/scategories/:slug' component={Subcategory} />
@@ -67,7 +69,7 @@ const App = () => {
         <UserRoute exact path='/me/password/update' component={Password} />
         <UserRoute exact path='/me/wishlist' component={WishList} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
-        <AdminRoute exact path='/admin/products' component={Products} />
+        <AdminRoute exact path='/admin/products' component={AdminProducts} />
         <AdminRoute
           exact
           path='/admin/products/:slug/edit'
@@ -83,11 +85,7 @@ const App = () => {
           path='/admin/products/subcategories'
           component={AdminSubcategory}
         />
-        <AdminRoute
-          exact
-          path='/admin/products/add'
-          component={AdminProduct}
-        />
+        <AdminRoute exact path='/admin/products/add' component={AdminProduct} />
       </Switch>
       <Footer />
     </>

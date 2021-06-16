@@ -3,9 +3,25 @@ import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/outline';
 
-const SlideOver = ({ open, setOpen }) => {
+const SlideOver = ({
+  open,
+  setOpen,
+  title,
+  showStickyFooter,
+  children,
+  onModalClick,
+  button,
+  button2,
+  unmount,
+  afterLeave,
+}) => {
   return (
-    <Transition.Root show={open} as={Fragment}>
+    <Transition.Root
+      show={open}
+      as={Fragment}
+      unmount={unmount}
+      afterLeave={afterLeave}
+    >
       <Dialog
         as='div'
         static
@@ -19,24 +35,29 @@ const SlideOver = ({ open, setOpen }) => {
           <div className='fixed inset-y-0 right-0 pl-10 max-w-full flex'>
             <Transition.Child
               as={Fragment}
+              unmount={unmount}
               enter='transform transition ease-in-out duration-500 sm:duration-700'
               enterFrom='translate-x-full'
               enterTo='translate-x-0'
               leave='transform transition ease-in-out duration-500 sm:duration-700'
               leaveFrom='translate-x-0'
               leaveTo='translate-x-full'
+              afterLeave={afterLeave}
             >
               <div className='w-screen max-w-md'>
-                <div className='h-full divide-y divide-gray-200 flex flex-col bg-white shadow-xl'>
+                <div
+                  className='h-full divide-y divide-gray-200 flex flex-col bg-white shadow-xl'
+                  onClick={onModalClick}
+                >
                   <div className='min-h-0 flex-1 flex flex-col py-6 overflow-y-scroll'>
                     <div className='px-4 sm:px-6'>
                       <div className='flex items-start justify-between'>
-                        <Dialog.Title className='text-lg font-medium text-gray-900'>
-                          Panel title
+                        <Dialog.Title className='text-lg font-medium text-blue-gray-800 font-hind'>
+                          {title}
                         </Dialog.Title>
                         <div className='ml-3 h-7 flex items-center'>
                           <button
-                            className='bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500'
+                            className='bg-white rounded-md text-blue-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-rose-500'
                             onClick={() => setOpen(false)}
                           >
                             <span className='sr-only'>Close panel</span>
@@ -47,21 +68,16 @@ const SlideOver = ({ open, setOpen }) => {
                     </div>
                     <div className='mt-6 relative flex-1 px-4 sm:px-6'>
                       {/* Replace with your content */}
-                      <div
-                        className='h-full border-2 border-dashed border-gray-200'
-                        aria-hidden='true'
-                      />
+                      {children}
                       {/* /End replace */}
                     </div>
                   </div>
-                  <div className='flex-shrink-0 px-4 py-4 flex justify-end'>
-                    <button
-                      type='submit'
-                      className='ml-4 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-                    >
-                      Save
-                    </button>
-                  </div>
+                  {showStickyFooter && (
+                    <div className='px-4 py-4 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense'>
+                      {button2}
+                      {button}
+                    </div>
+                  )}
                 </div>
               </div>
             </Transition.Child>

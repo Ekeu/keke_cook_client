@@ -38,7 +38,7 @@ const Select = ({ options, value, onChange, label, listBoxWrapperStyle }) => {
               >
                 {options?.map((option) => (
                   <Listbox.Option
-                    key={option._id}
+                    key={option.name}
                     className={({ active }) =>
                       classNames(
                         active
