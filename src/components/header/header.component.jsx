@@ -10,9 +10,7 @@ import { logout } from '../../redux/reducers/user/user.actions';
 
 import Logo from '../../assets/images/keke_cook_logo.svg';
 
-import {
-  MENU_HEADER_LINKS
-} from '../../constants/menu.constants';
+import { MENU_HEADER_LINKS } from '../../constants/menu.constants';
 import { SIGN_IN_BUTTON_HEADER } from '../../constants/auth.constants';
 
 import CustomLink from '../custom-link/custom-link.component.jsx';
@@ -25,6 +23,9 @@ function classNames(...classes) {
 const Header = () => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+  const cart = useSelector((state) => state.cart);
+  const { cartProducts } = cart;
+
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -77,10 +78,18 @@ const Header = () => {
                   </Disclosure.Button>
                 </div>
                 <div className='hidden lg:ml-4 lg:flex lg:items-center'>
-                  <button className='flex-shrink-0 bg-white p-1 text-gray-400 rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
-                    <span className='sr-only'>View notifications</span>
+                  <Link
+                    to={'/cart'}
+                    className='inline-block relative flex-shrink-0 bg-white p-1 text-blue-gray-400 rounded-full hover:text-blue-gray-500'
+                  >
+                    <span className='sr-only'>votre Panier</span>
                     <ShoppingCartIcon className='h-6 w-6' aria-hidden='true' />
-                  </button>
+                    {cartProducts.length > 0 && (
+                      <span className='absolute top-0 right-0 h-4 w-4 rounded-full ring-2 ring-white bg-rose-500 flex justify-center text-white items-center text-xs font-poppins'>
+                        {cartProducts.length}
+                      </span>
+                    )}
+                  </Link>
                   {userInfo ? (
                     <Menu as='div' className='ml-4 relative flex-shrink-0'>
                       {({ open }) => (

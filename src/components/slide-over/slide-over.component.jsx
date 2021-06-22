@@ -57,7 +57,7 @@ const SlideOver = ({
                         </Dialog.Title>
                         <div className='ml-3 h-7 flex items-center'>
                           <button
-                            className='bg-white rounded-md text-blue-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-rose-500'
+                            className='bg-white rounded-md text-blue-gray-400 hover:text-gray-500 focus:outline-none'
                             onClick={() => setOpen(false)}
                           >
                             <span className='sr-only'>Close panel</span>

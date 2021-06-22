@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Carousel } from 'react-responsive-carousel';
-import { ShoppingCartIcon } from '@heroicons/react/solid';
+import { ShoppingCartIcon, ArrowRightIcon } from '@heroicons/react/solid';
 import { HeartIcon } from '@heroicons/react/outline';
 import { toast } from 'react-toastify';
 
@@ -12,7 +12,9 @@ import DOMPurify from 'dompurify';
 
 import ProductNoImage from '../../components/product-image/product-no-image.component';
 import CustomButton from '../../components/custom-button/custom-button.component.jsx';
+import CustomLink from '../../components/custom-link/custom-link.component';
 import SlideOver from '../../components/slide-over/slide-over.component.jsx';
+import SlideOverCartItem from '../../components/slide-over-cart-item/slide-over-cart-item.component';
 import CupcakePage from '../../components/product-types/cupcake/cupcake-page.component';
 import NumberLetterCakePage from '../../components/product-types/number-letter-cake/number-letter-cake-page.component';
 import MacaronPage from '../../components/product-types/macaron/macaron-page.component';
@@ -22,11 +24,13 @@ import ProductRating from '../../components/product-rating/product-rating.compon
 import StarRatingModal from '../../components/star-rating/star-rating.component.jsx';
 import RelatedProducts from '../../components/related-products/related-products.component.jsx';
 import ProductCatSub from '../../components/product-cat-and-sub/product-cat-and-sub.component';
+import ProductQuantity from '../../components/product-quantity/product-quantity.component';
 
 import {
   listProductDetails,
   createProductReview,
 } from '../../redux/reducers/product/product.actions';
+import { addToCart } from '../../redux/reducers/cart/cart.actions';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../../redux/reducers/product/product.types';
 
 import { MULTISELECT_INTERNATIONALIZATION } from '../../constants/admin.product.constants';
@@ -39,6 +43,8 @@ const Product = ({ history, match }) => {
 
   const dispatch = useDispatch();
 
+  const cart = useSelector((state) => state.cart);
+  const { cartProducts } = cart;
   const productDetails = useSelector((state) => state.productDetails);
   const { product } = productDetails;
   const userLogin = useSelector((state) => state.userLogin);
@@ -52,6 +58,7 @@ const Product = ({ history, match }) => {
 
   //Product
   const [price, setPrice] = useState(1);
+  const [quantity, setQuantity] = useState(1);
 
   //Rating modal
   const [openRatingModal, setOpenRatingModal] = useState(false);
@@ -60,7 +67,7 @@ const Product = ({ history, match }) => {
   const cancelButtonRef = useRef();
 
   //Slide Over
-  const [openSlideOver, setOpenSlideOver] = useState(false);
+  const [openSlideOver, setOpenSlideOver] = useState(true);
 
   //Cupcake Component State
   const [cupcakeShares, setCupcakeShares] = useState([]);
@@ -120,11 +127,11 @@ const Product = ({ history, match }) => {
   const [numberOfFlavors, setNumberOfFlavors] = useState('');
   //End Number/Letter Cake
 
-  const disableRemainingToppings = (slectedToppings, toppings) => {
+  const disableRemainingToppings = (selectedToppings, toppings) => {
     return toppings.map((topping) => {
       const key = Object.keys(topping)[0];
       return (
-        (topping.disabled = !slectedToppings.some(
+        (topping.disabled = !selectedToppings.some(
           (selectedTopping) =>
             key in selectedTopping && selectedTopping[key] === topping[key]
         )),
@@ -155,6 +162,100 @@ const Product = ({ history, match }) => {
         state: { from: `/product/${product?.slug}` },
       });
     }
+  };
+
+  const handleAddToCart = () => {
+    let cartItem = {
+      _id: product?._id,
+      title: product?.title,
+      slug: product?.slug,
+      imageURL: product?.images[0]?.imageURL,
+      price,
+      category: product?.category?.name,
+      productType: product?.productType,
+      quantity,
+      shipping: product?.shipping,
+    };
+
+    if (product?.productType === 'Cupcake') {
+      cartItem = {
+        ...cartItem,
+        share: cupcakeShare?.name,
+        cake: cupcakeCake?.name,
+        fodder: cupcakeFodder?.name,
+        creamColor: cupcakeCreamColor?.name,
+        toppings: cupcakeSelectedToppings,
+        cake2: cupcakeCake2?.name,
+        fodder2: cupcakeFodder2?.name,
+        creamColor2: cupcakeCreamColor2?.name,
+        toppings2: cupcakeSelectedToppings2,
+        description: cupcakeDescription,
+      };
+    }
+    if (
+      product?.productType === 'Number Cake' ||
+      product?.productType === 'Letter Cake'
+    ) {
+      if (numberLetterCakeCaracters.length < Number(numberOfNumbersOrLetters)) {
+        toast(
+          <Notification error headline='Erreur commande'>
+            Vous devez fournir {numberOfNumbersOrLetters} caractère(s)
+          </Notification>
+        );
+        return;
+      }
+
+      if (!numberLetterCakeSelectedToppings.length) {
+        toast(
+          <Notification error headline='Erreur commande'>
+            Vous devez selectionnez 2 à 3 toppings!
+          </Notification>
+        );
+        return;
+      }
+      cartItem = {
+        ...cartItem,
+        share: numberLetterCakeShare?.name,
+        caracters: numberLetterCakeCaracters,
+        biscuit: numberLetterCakeBiscuit?.name,
+        cream: numberLetterCakeCream?.name,
+        toppings: numberLetterCakeSelectedToppings,
+        numberOfFlavors,
+      };
+
+      if (numberOfFlavors >= 2) {
+        if (!numberLetterCakeSelectedToppings2.length) {
+          toast(
+            <Notification error headline='Erreur commande'>
+              Vous devez selectionnez 2 à 3 toppings!
+            </Notification>
+          );
+          return;
+        }
+        cartItem = {
+          ...cartItem,
+          biscuit2: numberLetterCakeBiscuit2?.name,
+          cream2: numberLetterCakeCream2?.name,
+          toppings2: numberLetterCakeSelectedToppings2,
+        };
+      }
+    }
+    if (product?.productType === 'Macaron') {
+      cartItem = {
+        ...cartItem,
+        share: macaronShare?.name,
+        shellColor: macaronShellColor?.name,
+        fodder: macaronFodder?.name,
+      };
+    }
+    if (product?.productType === 'Brownie') {
+      cartItem = {
+        ...cartItem,
+        toppings: brownieSelectedToppings,
+      };
+    }
+    dispatch(addToCart(cartItem));
+    setOpenSlideOver(true);
   };
 
   const changeRating = (newRating, name) => {
@@ -316,14 +417,20 @@ const Product = ({ history, match }) => {
     ) {
       setPrice(Number(numberLetterCakeShare?.price));
     }
-  }, [cupcakeShare, numberLetterCakeShare, macaronShare, product?.productType]);
+    if (
+      product?.productType === 'Gateau Nature' ||
+      product?.productType === 'Brownie'
+    ) {
+      setPrice(Number(product?.productSpecifics.price));
+    }
+  }, [cupcakeShare, numberLetterCakeShare, macaronShare, product]);
 
   useEffect(() => {
     if (numberLetterCakeSelectedToppings.length === 3) {
-      setNumberLetterCakeToppings([
+      setNumberLetterCakeToppings((previousNumberLetterCakeToppings) => [
         ...disableRemainingToppings(
           numberLetterCakeSelectedToppings,
-          numberLetterCakeToppings
+          previousNumberLetterCakeToppings
         ),
       ]);
     } else {
@@ -341,10 +448,10 @@ const Product = ({ history, match }) => {
       }
     }
     if (numberLetterCakeSelectedToppings2.length === 3) {
-      setNumberLetterCakeToppings2([
+      setNumberLetterCakeToppings2((previousNumberLetterCakeToppings2) => [
         ...disableRemainingToppings(
           numberLetterCakeSelectedToppings2,
-          numberLetterCakeToppings2
+          previousNumberLetterCakeToppings2
         ),
       ]);
     } else {
@@ -362,8 +469,11 @@ const Product = ({ history, match }) => {
       }
     }
     if (cupcakeSelectedToppings.length === 3) {
-      setCupcakeToppings([
-        ...disableRemainingToppings(cupcakeSelectedToppings, cupcakeToppings),
+      setCupcakeToppings((previousCupcakeToppings) => [
+        ...disableRemainingToppings(
+          cupcakeSelectedToppings,
+          previousCupcakeToppings
+        ),
       ]);
     } else {
       if (product?._id && product?.productType === 'Cupcake') {
@@ -376,8 +486,11 @@ const Product = ({ history, match }) => {
       }
     }
     if (cupcakeSelectedToppings2.length === 3) {
-      setCupcakeToppings2([
-        ...disableRemainingToppings(cupcakeSelectedToppings2, cupcakeToppings2),
+      setCupcakeToppings2((previousCupcakeToppings2) => [
+        ...disableRemainingToppings(
+          cupcakeSelectedToppings2,
+          previousCupcakeToppings2
+        ),
       ]);
     } else {
       if (product?._id && product?.productType === 'Cupcake') {
@@ -390,8 +503,11 @@ const Product = ({ history, match }) => {
       }
     }
     if (brownieSelectedToppings.length === 3) {
-      setBrownieToppings([
-        ...disableRemainingToppings(brownieSelectedToppings, brownieToppings),
+      setBrownieToppings((previousBrownieToppings) => [
+        ...disableRemainingToppings(
+          brownieSelectedToppings,
+          previousBrownieToppings
+        ),
       ]);
     } else {
       if (
@@ -407,7 +523,6 @@ const Product = ({ history, match }) => {
         ]);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     cupcakeSelectedToppings,
     cupcakeSelectedToppings2,
@@ -602,11 +717,13 @@ const Product = ({ history, match }) => {
                   />
                 )}
 
-              <div className='mt-10'>
+              <ProductQuantity quantity={quantity} setQuantity={setQuantity} />
+
+              <div className='mt-9 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense'>
                 <CustomButton
                   type='button'
-                  onClick={() => setOpenSlideOver(true)}
-                  customStyles='w-full items-center uppercase block border border-transparent px-6 py-3 text-white bg-rose-500 hover:bg-rose-600 focus:outline-none'
+                  onClick={handleAddToCart}
+                  customStyles='w-full inline-flex text-base border border-transparent px-6 py-6 text-white bg-rose-500 hover:bg-rose-600 focus:outline-none sm:col-start-1 sm:text-sm'
                 >
                   <ShoppingCartIcon
                     className='-ml-1 mr-3 h-5 w-5'
@@ -616,13 +733,13 @@ const Product = ({ history, match }) => {
                 </CustomButton>
                 <CustomButton
                   type='button'
-                  customStyles='w-full items-center uppercase mt-2 block border border-blue-gray-400 px-6 py-3 text-blue-gray-700 bg-white hover:bg-blue-gray-100 focus:outline-none'
+                  customStyles='mt-3 w-full inline-flex text-base border border-blue-gray-400 px-6 py-6 text-blue-gray-700 bg-white hover:bg-blue-gray-100 focus:outline-none sm:mt-0 sm:col-start-2 sm:text-sm'
                 >
                   <HeartIcon
                     className='-ml-1 mr-3 h-5 w-5'
                     aria-hidden='true'
                   />
-                  Ajouter à la liste de souhaits
+                  Ajouter à mes souhaits
                 </CustomButton>
               </div>
               <ProductCatSub
@@ -634,7 +751,24 @@ const Product = ({ history, match }) => {
         </div>
         <RelatedProducts />
       </div>
-      <SlideOver open={openSlideOver} setOpen={setOpenSlideOver} />
+      <SlideOver
+        title={'Mon Panier'}
+        open={openSlideOver}
+        setOpen={setOpenSlideOver}
+        showStickyFooter={true}
+        button2={
+          <CustomLink
+            url='/cart'
+            type='link-button'
+            custom='w-full text-base justify-between px-4 py-4 text-white bg-rose-500 hover:bg-rose-600 sm:col-start-1 sm:text-sm uppercase col-span-2'
+          >
+            Voir mon panier
+            <ArrowRightIcon className='ml-3 -mr-1 h-5 w-5' aria-hidden='true' />
+          </CustomLink>
+        }
+      >
+        <SlideOverCartItem cartProducts={cartProducts} />
+      </SlideOver>
       <StarRatingModal
         openRating={openRatingModal}
         setOpenRating={setOpenRatingModal}

@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 
+import { cartReducer } from './reducers/cart/cart.reducers';
 import {
   userLoginReducer,
   userRegisterReducer,
@@ -10,7 +11,7 @@ import {
   categoryDeleteReducer,
   categoryDetailsReducer,
   categoryUpdateReducer,
-  categorySubcategoriesListReducer
+  categorySubcategoriesListReducer,
 } from './reducers/category/category.reducers';
 import {
   subcategoryCreateReducer,
@@ -28,7 +29,7 @@ import {
   productUpdateReducer,
   productSortNewReducer,
   productSortSoldReducer,
-  productCreateReviewReducer
+  productCreateReviewReducer,
 } from './reducers/product/product.reducers';
 
 const rootReducer = combineReducers({
@@ -40,6 +41,7 @@ const rootReducer = combineReducers({
   categoryDetails: categoryDetailsReducer,
   categoryUpdate: categoryUpdateReducer,
   categorySubcategoriesList: categorySubcategoriesListReducer,
+  cart: cartReducer,
   subcategoryCreate: subcategoryCreateReducer,
   subcategoryList: subcategoryListReducer,
   subcategoryDelete: subcategoryDeleteReducer,

@@ -5,6 +5,7 @@ import './index.css';
 import '@algolia/autocomplete-theme-classic';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import 'react-datepicker/dist/react-datepicker.css';
 import App from './App';
 import store from './redux/store';
 import reportWebVitals from './reportWebVitals';
