@@ -30,6 +30,7 @@ const NumberLetterCakePage = ({
   setNumberLetterCakeSelectedToppings,
   setNumberLetterCakeSelectedToppings2,
   price,
+  error,
   numberOfFlavors,
   overrideStrings,
   ArrowRenderer,
@@ -74,6 +75,7 @@ const NumberLetterCakePage = ({
           inputStyles='uppercase tracking-widest'
           autoComplete='off'
           placeholder='EK'
+          error={error}
         />
         <div className='col-span-3'>
           <Select
@@ -92,8 +94,8 @@ const NumberLetterCakePage = ({
           />
         </div>
         <div className='col-span-5'>
-          <label className='mb-1 block text-sm font-medium text-blue-gray-700 font-hind'>
-            Toppings
+          <label className='mb-1 flex justify-between text-sm font-medium text-blue-gray-700 font-hind'>
+            Toppings <span className='text-xs text-blue-gray-500'> 2 à 3 toppings</span>
           </label>
           <MultiSelect
             options={numberLetterCakeToppings}
@@ -128,8 +130,8 @@ const NumberLetterCakePage = ({
             />
           </div>
           <div className='col-span-5'>
-            <label className='mb-1 block text-sm font-medium text-blue-gray-700 font-hind'>
-              Toppings 2
+            <label className='mb-1 flex justify-between text-sm font-medium text-blue-gray-700 font-hind'>
+            Toppings <span className='text-xs text-blue-gray-500'> 2 à 3 toppings</span>
             </label>
             <MultiSelect
               options={numberLetterCakeToppings2}
