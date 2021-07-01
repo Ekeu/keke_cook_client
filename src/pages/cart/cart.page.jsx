@@ -1,20 +1,25 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import DatePicker from 'react-datepicker';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { TagIcon, ArrowRightIcon } from '@heroicons/react/outline';
 import { CalendarIcon } from '@heroicons/react/solid';
 import { registerLocale } from 'react-datepicker';
+import { toast } from 'react-toastify';
 import moment from 'moment';
 import 'moment/locale/fr';
 import fr from 'date-fns/locale/fr';
 
 import { currencyFormatter } from '../../utils/functions';
 
+import { createCart } from '../../redux/reducers/cart/cart.actions';
+import { CART_CREATE_RESET } from '../../redux/reducers/cart/cart.types';
+
 import { ReactComponent as EmptyCart } from '../../assets/images/empty-cart.svg';
 
 import CustomLink from '../../components/custom-link/custom-link.component';
 import CustomButton from '../../components/custom-button/custom-button.component';
 import CartItem from '../../components/cart-item/cart-item.component';
+import Notification from '../../components/notification/notification.component.jsx';
 
 moment.locale('fr');
 registerLocale('fr', fr);
@@ -54,15 +59,39 @@ const DateCustomInput = forwardRef(({ value, onClick }, ref) => (
   </CustomButton>
 ));
 
-const Cart = () => {
+const Cart = ({ history }) => {
   const [startDate, setStartDate] = useState(
     findNextInstanceInDaysNeededArray(daysNeeded).toDate()
   );
-
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   const { cartProducts } = cart;
+  const cartCreate = useSelector((state) => state.cartCreate);
+  const { loading, error, success } = cartCreate;
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+
+  const handleSaveCartToDatabase = () => {
+    dispatch(createCart(cartProducts));
+  };
+
+  useEffect(() => {
+    if (success) {
+      toast(
+        <Notification success headline='Panier Enregistré'>
+          Votre panier à été enregistré avec succès
+        </Notification>
+      );
+      history.push('/delivery');
+    }
+    if (error) {
+      toast(
+        <Notification error headline='Erreur'>
+          {error}
+        </Notification>
+      );
+    }
+  }, [dispatch, history, success, error]);
 
   return (
     <div className='min-h-screen bg-blue-gray-100'>
@@ -175,7 +204,7 @@ const Cart = () => {
                             </div>
                             <div className='min-w-0 flex-1 pt-1.5 flex justify-between space-x-4'>
                               <div className='font-hind'>
-                                <p className='text-sm text-blue-gray-500'>
+                                <p className='text-sm text-blue-gray-500 truncate'>
                                   {product?.title}
                                   {' x '}
                                   <span className='font-medium text-blue-gray-800'>
@@ -210,6 +239,8 @@ const Cart = () => {
                   {userInfo?.token ? (
                     <CustomButton
                       type='button'
+                      onClick={handleSaveCartToDatabase}
+                      loading={loading}
                       addStyles={
                         'inline-flex justify-between uppercase tracking-wider hover:bg-rose-600'
                       }

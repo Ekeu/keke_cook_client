@@ -27,6 +27,7 @@ import ProductUpdate from './pages/admin/product-update/product-update.page.jsx'
 import AdminProducts from './pages/admin/products/products.page.jsx';
 import Products from './pages/products/products.page';
 import Cart from './pages/cart/cart.page';
+import Checkout from './pages/checkout/checkout.page';
 
 import Header from './components/header/header.component';
 
@@ -64,6 +65,7 @@ const App = () => {
         <Route exact path='/password/new' component={ForgotPassword} />
         <Route exact path='/products' component={Products} />
         <Route exact path='/cart' component={Cart} />
+        <Route exact path='/delivery' component={Checkout} />
         <Route exact path='/product/:slug' component={Product} />
         <Route exact path='/categories/:slug' component={Category} />
         <Route exact path='/scategories/:slug' component={Subcategory} />

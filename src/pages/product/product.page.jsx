@@ -67,7 +67,7 @@ const Product = ({ history, match }) => {
   const cancelButtonRef = useRef();
 
   //Slide Over
-  const [openSlideOver, setOpenSlideOver] = useState(true);
+  const [openSlideOver, setOpenSlideOver] = useState(false);
 
   //Cupcake Component State
   const [cupcakeShares, setCupcakeShares] = useState([]);
