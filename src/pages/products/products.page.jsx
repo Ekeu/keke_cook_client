@@ -22,8 +22,8 @@ import AlgoliaSortBy from '../../components/algolia-sortby/algolia-sortby.compon
 import SlideOver from '../../components/slide-over/slide-over.component';
 
 const searchClient = algoliasearch(
-  '58LMZ6QOTT',
-  'ec682cfa8ab3eefa7316e730c4767485'
+  process.env.REACT_APP_ALGOLIA_APPLICATION_ID,
+  process.env.REACT_APP_ALGOLIA_SEARCH_ONLY_API_KEY
 );
 
 const Products = () => {

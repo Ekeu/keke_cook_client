@@ -884,3 +884,23 @@
 }
 
 /* React Date Picker */
+
+/* Google Maps */
+
+.pac-container {
+  font-family: 'Hind', sans-serif;
+}
+
+.pac-icon {
+  color: #64748b;
+}
+
+.pac-item-query {
+  color: #1e293b;
+}
+
+.pac-matched {
+  color: #f43f5e;
+}
+
+/* Google Maps */

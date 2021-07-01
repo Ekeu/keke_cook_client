@@ -9,8 +9,8 @@ import insightsClient from 'search-insights';
 import AlgoliaAutocomplete from '../algolia-autocomplete/algolia-autocomplete.component';
 import AAProduct from '../algolia-autocomplete-product/algolia-autocomplete-product.component';
 
-const appId = '58LMZ6QOTT';
-const apiKey = 'ec682cfa8ab3eefa7316e730c4767485';
+const appId = process.env.REACT_APP_ALGOLIA_APPLICATION_ID;
+const apiKey = process.env.REACT_APP_ALGOLIA_SEARCH_ONLY_API_KEY;
 const searchClient = algoliasearch(appId, apiKey);
 
 insightsClient('init', { appId, apiKey });
