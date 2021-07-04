@@ -23,12 +23,15 @@ const CustomButton = forwardRef(
     <button
       ref={ref}
       {...otherProps}
-      style={{ cursor: loading || disabled ? 'not-allowed' : undefined, ...style }}
+      style={{
+        cursor: loading || disabled ? 'not-allowed' : undefined,
+        ...style,
+      }}
       disabled={disabled}
       className={`${
         customStyles
           ? customStyles
-          : 'border-transparent text-white bg-rose-500'
+          : 'border-transparent text-white bg-rose-500 hover:bg-rose-600'
       } w-full flex justify-center py-2 px-5 border rounded-md shadow-sm text-base font-medium focus:outline-none ${addStyles}`}
     >
       {loading ? (

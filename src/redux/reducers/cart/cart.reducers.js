@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   CART_ADD_PRODUCT,
@@ -25,7 +26,7 @@ export const cartReducer = (state = { cartProducts: [] }, action) => {
       const payload = action.payload;
       return {
         ...state,
-        cartProducts: _.uniqWith([...state.cartProducts, payload], _.isEqual),
+        cartProducts: _.uniqWith([...state.cartProducts, {...payload, c_id: uuidv4()}], _.isEqual),
       };
     case CART_UPDATE_PRODUCT:
       return {
@@ -36,7 +37,7 @@ export const cartReducer = (state = { cartProducts: [] }, action) => {
       return {
         ...state,
         cartProducts: state.cartProducts.filter(
-          (product) => product._id !== action.payload
+          (product) => product.c_id !== action.payload
         ),
       };
     case CART_RESET_PRODUCT:

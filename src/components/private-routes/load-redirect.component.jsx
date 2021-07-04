@@ -1,26 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Dialog } from '@headlessui/react';
 
 import Modal from '../modal/modal.component';
 import Loader from '../loader/loader.component';
 
 const LoadRedirect = () => {
   const [countDown, setCountDown] = useState(5);
+  const [openLoad, setOpenLoad] = useState(false);
   const history = useHistory();
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCountDown((currentCountDown) => --currentCountDown);
     }, 2000);
+    setOpenLoad(true);
     if (countDown === 0) {
       history.push('/');
     }
-    return () => clearInterval(interval);
+    return () => {
+      setOpenLoad(false);
+      clearInterval(interval);
+    };
   }, [countDown, history]);
   return (
     <Modal
-      open={true}
+      open={openLoad}
       backgroundColor={'bg-blue-gray-500'}
       backgroundOpacity={'bg-opacity-60'}
       onClose={() => {}}
@@ -30,12 +34,9 @@ const LoadRedirect = () => {
           <Loader />
         </div>
         <div className='mt-3 text-center sm:mt-5'>
-          <Dialog.Title
-            as='h3'
-            className='text-lg leading-6 font-medium text-blue-gray-800'
-          >
+          <h3 className='text-lg leading-6 font-medium text-blue-gray-800'>
             Vous allez être redirigé automatiquement
-          </Dialog.Title>
+          </h3>
           <div className='mt-2 prose prose-indigo prose-lg'>
             <blockquote className='text-sm text-blue-gray-500'>
               Nul n'est heureux que le gourmand

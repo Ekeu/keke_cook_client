@@ -7,10 +7,10 @@ const CheckoutCartDetailContainer = ({
 }) => {
   return (
     <div
-      className={`bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6 ${containerStyles}`}
+      className={`relative bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6 ${containerStyles}`}
     >
       <h2
-        id='timeline-title'
+        id='headline-title'
         className='text-lg font-bold uppercase font-hind text-blue-gray-800'
       >
         {headline}

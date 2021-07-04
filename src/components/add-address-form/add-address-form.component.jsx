@@ -20,7 +20,7 @@ const AddAddressForm = ({ loading, addressToUpdate }) => {
   const [loadingActionButton, setLoadingActionButton] = useState(false);
   const googleMapsRef = useRef(null);
   const updateUserAddress = useSelector((state) => state.updateUserAddress);
-  const { loading:loadingUpdateUserAddress } = updateUserAddress;
+  const { loading: loadingUpdateUserAddress } = updateUserAddress;
   const userDetailAddress = useSelector((state) => state.userDetailAddress);
   const {
     address: {
@@ -61,6 +61,8 @@ const AddAddressForm = ({ loading, addressToUpdate }) => {
     loadMapObject(48.499998, 2.499998);
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace();
+      setValue('city', place.address_components[2].long_name);
+      setValue('zip', place.address_components[6].long_name);
       showUserLocationOnTheMap(
         place.geometry.location.lat(),
         place.geometry.location.lng()
@@ -89,6 +91,27 @@ const AddAddressForm = ({ loading, addressToUpdate }) => {
   }, []);
 
   useEffect(() => {
+    const codeAddress = () => {
+      const map = loadMapObject(48.499998, 2.499998);
+      const geocoder = new window.google.maps.Geocoder();
+
+      geocoder
+        .geocode({ address: street_address })
+        .then(({ results }) => {
+          map.setCenter(results[0].geometry.location);
+          new window.google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location,
+          });
+        })
+        .catch((error) => {
+          console.error(
+            'Geocode was not successful for the following reason: ',
+            error
+          );
+        });
+    };
+
     if (addressToUpdate && window.google) {
       codeAddress();
       setValue('first_name', first_name);
@@ -100,33 +123,22 @@ const AddAddressForm = ({ loading, addressToUpdate }) => {
     }
     if (error) {
       toast(
-        <Notification error headline="Erreur de chargement">
+        <Notification error headline='Erreur de chargement'>
           Une erreur s'est produite veuillez réessayer.
         </Notification>
       );
     }
-  }, [addressToUpdate, street_address, error]);
-
-  const codeAddress = () => {
-    const map = loadMapObject(48.499998, 2.499998);
-    const geocoder = new window.google.maps.Geocoder();
-
-    geocoder
-      .geocode({ address: street_address })
-      .then(({ results }) => {
-        map.setCenter(results[0].geometry.location);
-        new window.google.maps.Marker({
-          map: map,
-          position: results[0].geometry.location,
-        });
-      })
-      .catch((error) => {
-        console.error(
-          'Geocode was not successful for the following reason: ',
-          error
-        );
-      });
-  };
+  }, [
+    addressToUpdate,
+    street_address,
+    error,
+    city,
+    first_name,
+    last_name,
+    setValue,
+    street_address_cp,
+    zip,
+  ]);
 
   const handleLocateMe = (e) => {
     e.preventDefault();
@@ -185,11 +197,14 @@ const AddAddressForm = ({ loading, addressToUpdate }) => {
           'street_address',
           googleMapsResponse.data.results[0].formatted_address
         );
-        /* toast(
-          <Notification success headline={'Mon Adresse'}>
-            {googleMapsResponse.data.results[0].formatted_address}
-          </Notification>
-        ); */
+        setValue(
+          'city',
+          googleMapsResponse.data.results[0].address_components[2].long_name
+        );
+        setValue(
+          'zip',
+          googleMapsResponse.data.results[0].address_components[6].long_name
+        );
       }
       setLoadingActionButton(false);
     } catch (error) {

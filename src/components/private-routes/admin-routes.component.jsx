@@ -23,11 +23,9 @@ const AdminRoute = ({ children, ...rest }) => {
     if (userInfo?.token) {
       getAdminUser(userInfo.token)
         .then((res) => {
-          console.log(res);
           setIsAdmin(true);
         })
         .catch((error) => {
-          console.log(error);
           setIsAdmin(false);
         });
     }

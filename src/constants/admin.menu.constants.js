@@ -61,6 +61,9 @@ export const ADMIN_NAVIGATION_COLORS = {
 export const CATEGORY_HEADLINE = 'Catégories';
 export const CATEGORY_DESCRIPTION =
   'Créer, modifier et supprimer vos différentes catégories';
+export const COUPON_HEADLINE = 'Codes Promo';
+export const COUPON_DESCRIPTION =
+  'Créer, et supprimer vos différents codes promo';
 export const SUBCATEGORY_HEADLINE = 'Sous Catégories';
 export const SUBCATEGORY_DESCRIPTION =
   'Créer, modifier et supprimer vos différentes sous catégories';
@@ -72,6 +75,8 @@ export const PRODUCTS_DESCRIPTION = 'Modifier et supprimer vos produits';
 
 export const CATEGORY_DELETE_ALERT_MESSAGE =
   'Êtes vous sûr de vouloir supprimer cette catégorie? Toutes les données liées à cette catégorie seront définitivement supprimées de nos servveurs. Cette action est irreversible.';
+export const COUPON_DELETE_ALERT_MESSAGE =
+  'Êtes vous sûr de vouloir supprimer ce code promo? Toutes les données liées à ce code promo seront définitivement supprimées de nos servveurs. Cette action est irreversible.';
 export const SUBCATEGORY_DELETE_ALERT_MESSAGE =
   'Êtes vous sûr de vouloir supprimer cette sous ccatégorie? Toutes les données liées à cette sous catégorie seront définitivement supprimées de nos servveurs. Cette action est irreversible.';
 export const PRODUCT_DELETE_ALERT_MESSAGE =

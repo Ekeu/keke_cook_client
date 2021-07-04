@@ -22,6 +22,14 @@ import {
   DELETE_ADDRESS_SUCCESS,
   DELETE_ADDRESS_FAIL,
   DELETE_ADDRESS_RESET,
+  APPLY_COUPON_REQUEST,
+  APPLY_COUPON_SUCCESS,
+  APPLY_COUPON_FAIL,
+  APPLY_COUPON_RESET,
+  REMOVE_COUPON_REQUEST,
+  REMOVE_COUPON_SUCCESS,
+  REMOVE_COUPON_FAIL,
+  REMOVE_COUPON_RESET,
 } from './user.types';
 
 export const userLoginReducer = (state = {}, action) => {
@@ -106,6 +114,44 @@ export const deleteUserAddressReducer = (state = {}, action) => {
     case DELETE_ADDRESS_FAIL:
       return { loading: false, error: action.payload };
     case DELETE_ADDRESS_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const applyUserCouponReducer = (state = {}, action) => {
+  switch (action.type) {
+    case APPLY_COUPON_REQUEST:
+      return { ...state, loading: true };
+    case APPLY_COUPON_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        cartAfterDiscount: action.payload,
+      };
+    case APPLY_COUPON_FAIL:
+      return { loading: false, error: action.payload };
+    case APPLY_COUPON_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const removeUserCouponReducer = (state = {}, action) => {
+  switch (action.type) {
+    case REMOVE_COUPON_REQUEST:
+      return { ...state, loading: true };
+    case REMOVE_COUPON_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        cartAfterDiscountRemoved: action.payload,
+      };
+    case REMOVE_COUPON_FAIL:
+      return { loading: false, error: action.payload };
+    case REMOVE_COUPON_RESET:
       return {};
     default:
       return state;

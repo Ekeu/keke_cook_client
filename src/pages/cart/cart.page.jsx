@@ -72,7 +72,7 @@ const Cart = ({ history }) => {
   const { userInfo } = userLogin;
 
   const handleSaveCartToDatabase = () => {
-    dispatch(createCart(cartProducts));
+    dispatch(createCart({ cartProducts, userDeliveryDate: startDate }));
   };
 
   useEffect(() => {
@@ -82,7 +82,8 @@ const Cart = ({ history }) => {
           Votre panier à été enregistré avec succès
         </Notification>
       );
-      history.push('/delivery');
+      dispatch({ type: CART_CREATE_RESET });
+      history.push('/me/delivery');
     }
     if (error) {
       toast(
@@ -160,7 +161,7 @@ const Cart = ({ history }) => {
               {/* Description list*/}
               <section aria-labelledby='applicant-information-title'>
                 {cartProducts.map((product) => (
-                  <CartItem key={product?.title} item={product} />
+                  <CartItem key={product?.c_id} item={product} />
                 ))}
               </section>
             </div>
