@@ -7,9 +7,16 @@ import {
   emptyCartReducer
 } from './reducers/cart/cart.reducers';
 import {
+  couponListReducer,
+  couponDeleteReducer,
+  couponCreateReducer
+} from './reducers/coupon/coupon.reducers';
+import {
   userLoginReducer,
   userRegisterReducer,
   addUserAddressReducer,
+  applyUserCouponReducer,
+  removeUserCouponReducer,
   updateUserAddressReducer,
   userDetailAddressReducer,
   deleteUserAddressReducer,
@@ -46,6 +53,8 @@ const rootReducer = combineReducers({
   addUserAddress: addUserAddressReducer,
   updateUserAddress: updateUserAddressReducer,
   userDetailAddress: userDetailAddressReducer,
+  applyUserCoupon: applyUserCouponReducer,
+  removeUserCoupon: removeUserCouponReducer,
   deleteUserAddress: deleteUserAddressReducer,
   userRegister: userRegisterReducer,
   categoryCreate: categoryCreateReducer,
@@ -57,6 +66,9 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   cartCreate: cartCreateReducer,
   cartDetails: cartDetailsReducer,
+  couponList: couponListReducer,
+  couponDelete: couponDeleteReducer,
+  couponCreate: couponCreateReducer,
   emptyCart: emptyCartReducer,
   subcategoryCreate: subcategoryCreateReducer,
   subcategoryList: subcategoryListReducer,

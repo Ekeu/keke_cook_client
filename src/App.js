@@ -20,6 +20,7 @@ import AdminDashboard from './pages/admin/dashboard.page.jsx';
 import AdminCategory from './pages/admin/category/category.page.jsx';
 import AdminSubcategory from './pages/admin/subcategory/subcategory.page.jsx';
 import AdminProduct from './pages/admin/product/product.page.jsx';
+import Coupon from './pages/admin/coupon/coupon.page.jsx';
 import Product from './pages/product/product.page.jsx';
 import Category from './pages/category/category.page.jsx';
 import Subcategory from './pages/subcategory/subcategory.page.jsx';
@@ -28,6 +29,7 @@ import AdminProducts from './pages/admin/products/products.page.jsx';
 import Products from './pages/products/products.page';
 import Cart from './pages/cart/cart.page';
 import Checkout from './pages/checkout/checkout.page';
+import Payment from './pages/payment/payment.page';
 
 import Header from './components/header/header.component';
 
@@ -65,15 +67,17 @@ const App = () => {
         <Route exact path='/password/new' component={ForgotPassword} />
         <Route exact path='/products' component={Products} />
         <Route exact path='/cart' component={Cart} />
-        <Route exact path='/delivery' component={Checkout} />
         <Route exact path='/product/:slug' component={Product} />
         <Route exact path='/categories/:slug' component={Category} />
         <Route exact path='/scategories/:slug' component={Subcategory} />
+        <UserRoute exact path='/me/delivery' component={Checkout} />
+        <UserRoute exact path='/me/payment' component={Payment} />
         <UserRoute exact path='/me/account' component={History} />
         <UserRoute exact path='/me/password/update' component={Password} />
         <UserRoute exact path='/me/wishlist' component={WishList} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/products' component={AdminProducts} />
+        <AdminRoute exact path='/admin/products/coupons' component={Coupon} />
         <AdminRoute
           exact
           path='/admin/products/:slug/edit'

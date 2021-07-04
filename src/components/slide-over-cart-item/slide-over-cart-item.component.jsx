@@ -16,7 +16,7 @@ const SlideOverCartItem = ({ cartProducts }) => {
   return (
     <ul className='flex-1 divide-y divide-gray-200 overflow-y-auto'>
       {cartProducts.map((product) => (
-        <li key={product?.title}>
+        <li key={product?.c_id}>
           <div className='relative group py-6 px-1 flex items-center'>
             <Link
               to={`product/${product?.slug}`}
@@ -50,7 +50,7 @@ const SlideOverCartItem = ({ cartProducts }) => {
             <div className='ml-2 flex-shrink-0 relative inline-block text-left'>
               <button
                 className='group relative w-8 h-8 bg-white rounded-full inline-flex items-center justify-center focus:outline-none'
-                onClick={() => handleRemoveProductFromCart(product?._id)}
+                onClick={() => handleRemoveProductFromCart(product?.c_id)}
               >
                 <span className='sr-only'>Open options menu</span>
                 <span className='flex items-center justify-center h-full w-full rounded-full'>

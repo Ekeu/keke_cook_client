@@ -28,7 +28,7 @@ export const updateCart =
     const cart = JSON.parse(localStorage.getItem('cart'));
 
     const updatedCart = cart.map((product) =>
-      product?._id === cartItemId ? { ...product, quantity } : product
+      product?.c_id === cartItemId ? { ...product, quantity } : product
     );
 
     dispatch({
@@ -39,6 +39,7 @@ export const updateCart =
   };
 
 export const removeFromCart = (cartItemId) => (dispatch, getState) => {
+  console.log(cartItemId)
   dispatch({
     type: CART_REMOVE_PRODUCT,
     payload: cartItemId,

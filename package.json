@@ -9,7 +9,7 @@
     "@algolia/autocomplete-plugin-query-suggestions": "^1.1.0",
     "@algolia/autocomplete-plugin-recent-searches": "^1.1.0",
     "@algolia/autocomplete-theme-classic": "^1.1.0",
-    "@craco/craco": "^5.9.0",
+    "@craco/craco": "^6.1.2",
     "@headlessui/react": "^1.1.1",
     "@heroicons/react": "^1.0.1",
     "@tailwindcss/aspect-ratio": "^0.2.0",

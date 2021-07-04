@@ -17,10 +17,27 @@ const CheckoutProductCard = ({ product }) => {
         <div className='space-y-1'>
           <div className='text-md leading-6 font-medium font-hind space-y-1'>
             <h3>{title}</h3>
-            <p className='text-blue-gray-800 font-bold'>{currencyFormatter(price)}</p>
+            <div className={'flex space-x-2'}>
+              {product?.priceAfterDiscount && (
+                <p className={`text-rose-500 font-semibold`}>
+                  {currencyFormatter(product?.priceAfterDiscount)}
+                </p>
+              )}
+              <p
+                className={`${
+                  product?.priceAfterDiscount
+                    ? 'text-blue-gray-500 line-through'
+                    : 'text-blue-gray-800'
+                } font-semibold`}
+              >
+                {currencyFormatter(price)}
+              </p>
+            </div>
           </div>
           <div className='text-md'>
-            <p className='text-blue-gray-500 font-hind'>Quantité : {quantity}</p>
+            <p className='text-blue-gray-500 font-hind'>
+              Quantité : {quantity}
+            </p>
           </div>
         </div>
       </div>

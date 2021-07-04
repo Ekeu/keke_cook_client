@@ -18,6 +18,12 @@ import {
   DELETE_ADDRESS_REQUEST,
   DELETE_ADDRESS_SUCCESS,
   DELETE_ADDRESS_FAIL,
+  APPLY_COUPON_REQUEST,
+  APPLY_COUPON_SUCCESS,
+  APPLY_COUPON_FAIL,
+  REMOVE_COUPON_REQUEST,
+  REMOVE_COUPON_SUCCESS,
+  REMOVE_COUPON_FAIL
 } from './user.types';
 import firebase from 'firebase';
 import axios from 'axios';
@@ -301,6 +307,79 @@ export const deleteAddress = (_id) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: DELETE_ADDRESS_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const applyCoupon = (coupon) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: APPLY_COUPON_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        Authorization: userInfo.token,
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/v1/user/coupon`,
+      { coupon },
+      config
+    );
+
+    dispatch({
+      type: APPLY_COUPON_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    console.log(error)
+    dispatch({
+      type: APPLY_COUPON_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const removeCoupon = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: REMOVE_COUPON_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        Authorization: userInfo.token,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/v1/user/coupon`,
+      {},
+      config
+    );
+
+    dispatch({
+      type: REMOVE_COUPON_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: REMOVE_COUPON_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

@@ -51,7 +51,7 @@ const UserNav = ({
   const location = useLocation();
 
   return (
-    <div className='flex overflow-hidden bg-blue-gray-100'>
+    <div className='flex overflow-hidden bg-blue-gray-100 h-screen'>
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
           as='div'

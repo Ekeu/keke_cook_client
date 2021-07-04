@@ -23,12 +23,12 @@ const CartItem = ({ item }) => {
 
   useEffect(() => {
     if (quantity !== item?.quantity) {
-      dispatch(updateCart(quantity, item?._id));
+      dispatch(updateCart(quantity, item?.c_id));
     }
-  }, [dispatch, quantity, item?.quantity, item?._id]);
+  }, [dispatch, quantity, item?.quantity, item?.c_id]);
 
   const handleRemoveProductFromCart = () => {
-    dispatch(removeFromCart(item?._id))
+    dispatch(removeFromCart(item?.c_id))
   };
 
   return (
