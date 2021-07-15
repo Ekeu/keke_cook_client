@@ -46,7 +46,7 @@ const Payment = ({ history }) => {
   const [sdkReady, setSdkReady] = useState(false);
 
   const cartDetails = useSelector((state) => state.cartDetails);
-  const { loading, error, success, cart } = cartDetails;
+  const { loading, cart } = cartDetails;
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const applyUserCoupon = useSelector((state) => state.applyUserCoupon);

@@ -59,7 +59,7 @@ const Checkout = ({ history }) => {
   const [totalToPay, setTotalToPay] = useState(0);
 
   const cartDetails = useSelector((state) => state.cartDetails);
-  const { loading, error, success, cart } = cartDetails;
+  const { loading, cart } = cartDetails;
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
   const emptyCart = useSelector((state) => state.emptyCart);

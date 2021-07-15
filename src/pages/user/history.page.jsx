@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ClipboardCheckIcon } from '@heroicons/react/outline';
 
@@ -17,7 +17,7 @@ const History = () => {
   const dispatch = useDispatch();
 
   const orderListUser = useSelector((state) => state.orderListUser);
-  const { loading, orders, error } = orderListUser;
+  const { orders } = orderListUser;
   const emptyCart = useSelector((state) => state.emptyCart);
   const { success: successEmptyCart } = emptyCart;
   const userLogin = useSelector((state) => state.userLogin);

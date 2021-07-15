@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
@@ -49,27 +49,6 @@ const AddAddressForm = ({ loading, addressToUpdate }) => {
     }
   });
 
-  const loadGooglaMapsPlacesObject = () => {
-    const autocomplete = new window.google.maps.places.Autocomplete(
-      document.getElementById('street_address'),
-      {
-        bounds: new window.google.maps.LatLngBounds(
-          new window.google.maps.LatLng(48.499998, 2.499998)
-        ),
-      }
-    );
-    loadMapObject(48.499998, 2.499998);
-    autocomplete.addListener('place_changed', () => {
-      const place = autocomplete.getPlace();
-      setValue('city', place.address_components[2].long_name);
-      setValue('zip', place.address_components[6].long_name);
-      showUserLocationOnTheMap(
-        place.geometry.location.lat(),
-        place.geometry.location.lng()
-      );
-    });
-  };
-
   const loadMapObject = (lat, long) => {
     return new window.google.maps.Map(googleMapsRef.current, {
       zoom: 15,
@@ -78,7 +57,37 @@ const AddAddressForm = ({ loading, addressToUpdate }) => {
     });
   };
 
+  const showUserLocationOnTheMap = useCallback((lat, long) => {
+    const map = loadMapObject(lat, long);
+
+    new window.google.maps.Marker({
+      position: new window.google.maps.LatLng(lat, long),
+      map,
+    });
+  }, []);
+
   useEffect(() => {
+    const loadGooglaMapsPlacesObject = () => {
+      const autocomplete = new window.google.maps.places.Autocomplete(
+        document.getElementById('street_address'),
+        {
+          bounds: new window.google.maps.LatLngBounds(
+            new window.google.maps.LatLng(48.499998, 2.499998)
+          ),
+        }
+      );
+      loadMapObject(48.499998, 2.499998);
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        setValue('city', place.address_components[2].long_name);
+        setValue('zip', place.address_components[6].long_name);
+        showUserLocationOnTheMap(
+          place.geometry.location.lat(),
+          place.geometry.location.lng()
+        );
+      });
+    };
+
     if (!window.google) {
       const googleMapScript = document.createElement('script');
       googleMapScript.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&libraries=places`;
@@ -88,7 +97,7 @@ const AddAddressForm = ({ loading, addressToUpdate }) => {
     } else {
       loadGooglaMapsPlacesObject();
     }
-  }, []);
+  }, [setValue, showUserLocationOnTheMap]);
 
   useEffect(() => {
     const codeAddress = () => {
@@ -170,15 +179,6 @@ const AddAddressForm = ({ loading, addressToUpdate }) => {
         </Notification>
       );
     }
-  };
-
-  const showUserLocationOnTheMap = (lat, long) => {
-    const map = loadMapObject(lat, long);
-
-    new window.google.maps.Marker({
-      position: new window.google.maps.LatLng(lat, long),
-      map,
-    });
   };
 
   const getUserAddress = async (lat, long) => {

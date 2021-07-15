@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ClockIcon } from '@heroicons/react/outline';
 import { toast } from 'react-toastify';
