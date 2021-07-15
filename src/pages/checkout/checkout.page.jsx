@@ -223,6 +223,10 @@ const Checkout = ({ history }) => {
 
   useEffect(() => {
     setSelectedAddress(userInfo?.addresses[0]);
+    localStorage.setItem(
+      'deliveryAddress',
+      JSON.stringify(userInfo?.addresses[0])
+    );
     if (cart?.cartTotal <= 50) {
       setDeliveryFee(10);
     } else {
@@ -353,7 +357,7 @@ const Checkout = ({ history }) => {
                 <div
                   className={`relative bg-white px-4 py-5 shadow sm:rounded-lg sm:px-6`}
                 >
-                  <div className='hidden sm:block absolute top-0 right-0 pt-4 pr-4'>
+                  <div className='absolute top-0 right-0 pt-4 pr-4'>
                     <button
                       type='button'
                       className='bg-white rounded-md text-blue-gray-400 hover:text-blue-gray-500 focus:outline-none'
@@ -377,15 +381,6 @@ const Checkout = ({ history }) => {
                     >
                       {cart?.appliedDiscount}
                     </h2>
-                  </div>
-                  <div className='mt-5 sm:hidden'>
-                    <CustomButton
-                      type='button'
-                      onClick={handleRemoveDiscountCoupon}
-                      addStyles={'uppercase'}
-                    >
-                      Retirer ce code promo
-                    </CustomButton>
                   </div>
                 </div>
               ) : (

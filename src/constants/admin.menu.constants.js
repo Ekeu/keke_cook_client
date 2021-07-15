@@ -46,6 +46,26 @@ export const ADMIN_NAVIGATION = [
   },
 ];
 
+export const ORDER_STATUS_OPTIONS = [
+  {
+    title: 'Non traitée',
+    description: "La commande vient juste d'être passée par l'utilisateur.",
+  },
+  {
+    title: 'Pris en charge',
+    description:
+      "La commande est en cours de réalisation par l'équipe Keke Cook.",
+  },
+  {
+    title: 'Annulée',
+    description: 'La commande passée a été annulée pour des raison diverses.',
+  },
+  {
+    title: 'Traitée',
+    description: 'La commande a été réalisée et livrée.',
+  },
+];
+
 export const ADMIN_NAVIGATION_COLORS = {
   sideNavPrimaryBgColor: 'bg-blue-gray-700',
   sideNavActiveLinkBgColor: 'bg-blue-gray-800',
@@ -61,6 +81,11 @@ export const ADMIN_NAVIGATION_COLORS = {
 export const CATEGORY_HEADLINE = 'Catégories';
 export const CATEGORY_DESCRIPTION =
   'Créer, modifier et supprimer vos différentes catégories';
+export const ADMIN_DASHBOARD_HEADLINE = 'Dashboard';
+export const ADMIN_DASHBOARD_DESCRIPTION =
+  "Ayez un visuel complèt sur l'état de vos comptes et commandes";
+export const WISHLIST_HEADLINE = 'Liste de souhaits';
+export const WISHLIST_DESCRIPTION = 'Gérez vos produits favoris';
 export const COUPON_HEADLINE = 'Codes Promo';
 export const COUPON_DESCRIPTION =
   'Créer, et supprimer vos différents codes promo';

@@ -10,6 +10,7 @@ import htmlToDraft from 'html-to-draftjs';
 import { convertToHTML } from 'draft-convert';
 import DOMPurify from 'dompurify';
 
+import SpinSVG from '../../components/spin-svg/spin-svg.component';
 import ProductNoImage from '../../components/product-image/product-no-image.component';
 import CustomButton from '../../components/custom-button/custom-button.component.jsx';
 import CustomLink from '../../components/custom-link/custom-link.component';
@@ -31,7 +32,9 @@ import {
   createProductReview,
 } from '../../redux/reducers/product/product.actions';
 import { addToCart } from '../../redux/reducers/cart/cart.actions';
+import { addProductToWishlist } from '../../redux/reducers/user/user.actions';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../../redux/reducers/product/product.types';
+import { ADD_PRODUCT_TO_WISHLIST_RESET } from '../../redux/reducers/user/user.types';
 
 import { MULTISELECT_INTERNATIONALIZATION } from '../../constants/admin.product.constants';
 import { PRODUCT_PAGE_SVG_PATTERN } from '../../constants/product-page.constants';
@@ -55,6 +58,12 @@ const Product = ({ history, match }) => {
     success: successProductReview,
     error: errorProductReview,
   } = productCreateReview;
+  const addToWishlist = useSelector((state) => state.addToWishlist);
+  const {
+    loading: loadingAddToWishlist,
+    success: successAddToWishlist,
+    error: errorAddToWishlist,
+  } = addToWishlist;
 
   //Product
   const [price, setPrice] = useState(1);
@@ -256,6 +265,10 @@ const Product = ({ history, match }) => {
     }
     dispatch(addToCart(cartItem));
     setOpenSlideOver(true);
+  };
+
+  const handleAddToWishlist = () => {
+    dispatch(addProductToWishlist(product?._id));
   };
 
   const changeRating = (newRating, name) => {
@@ -545,6 +558,24 @@ const Product = ({ history, match }) => {
     }
   }, [product]);
 
+  useEffect(() => {
+    if (successAddToWishlist) {
+      toast(
+        <Notification success headline='❤'>
+          Le produit a été ajouté à votre liste de souhait!
+        </Notification>
+      );
+      dispatch({ type: ADD_PRODUCT_TO_WISHLIST_RESET });
+    }
+    if (errorAddToWishlist) {
+      toast(
+        <Notification error headline='Erreur'>
+          Une erreur s'est produite. Veuillez réessayer!
+        </Notification>
+      );
+    }
+  }, [dispatch, successAddToWishlist, errorAddToWishlist]);
+
   const createMarkup = (html) => {
     return {
       __html: DOMPurify.sanitize(html),
@@ -733,12 +764,21 @@ const Product = ({ history, match }) => {
                 </CustomButton>
                 <CustomButton
                   type='button'
+                  onClick={handleAddToWishlist}
                   customStyles='mt-3 w-full inline-flex text-base border border-blue-gray-400 px-6 py-6 text-blue-gray-700 bg-white hover:bg-blue-gray-100 focus:outline-none sm:mt-0 sm:col-start-2 sm:text-sm'
                 >
-                  <HeartIcon
-                    className='-ml-1 mr-3 h-5 w-5'
-                    aria-hidden='true'
-                  />
+                  {loadingAddToWishlist ? (
+                    <SpinSVG
+                      size={'h-5 w-5'}
+                      color={'text-blue-gray-800'}
+                      className={'-ml-1 mr-3'}
+                    />
+                  ) : (
+                    <HeartIcon
+                      className='-ml-1 mr-3 h-5 w-5'
+                      aria-hidden='true'
+                    />
+                  )}
                   Ajouter à mes souhaits
                 </CustomButton>
               </div>

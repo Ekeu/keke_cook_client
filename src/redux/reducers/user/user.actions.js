@@ -23,7 +23,16 @@ import {
   APPLY_COUPON_FAIL,
   REMOVE_COUPON_REQUEST,
   REMOVE_COUPON_SUCCESS,
-  REMOVE_COUPON_FAIL
+  REMOVE_COUPON_FAIL,
+  ADD_PRODUCT_TO_WISHLIST_REQUEST,
+  ADD_PRODUCT_TO_WISHLIST_SUCCESS,
+  ADD_PRODUCT_TO_WISHLIST_FAIL,
+  GET_WISHLIST_REQUEST,
+  GET_WISHLIST_SUCCESS,
+  GET_WISHLIST_FAIL,
+  REMOVE_PRODUCT_FROM_WISHLIST_REQUEST,
+  REMOVE_PRODUCT_FROM_WISHLIST_SUCCESS,
+  REMOVE_PRODUCT_FROM_WISHLIST_FAIL,
 } from './user.types';
 import firebase from 'firebase';
 import axios from 'axios';
@@ -380,6 +389,110 @@ export const removeCoupon = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: REMOVE_COUPON_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const addProductToWishlist = (productId) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: ADD_PRODUCT_TO_WISHLIST_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        Authorization: userInfo.token,
+      },
+    };
+
+    const { data } = await axios.post(
+      `/api/v1/user/wishlist`,
+      {productId},
+      config
+    );
+
+    dispatch({
+      type: ADD_PRODUCT_TO_WISHLIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADD_PRODUCT_TO_WISHLIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const getWishlist = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: GET_WISHLIST_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        Authorization: userInfo.token,
+      },
+    };
+
+    const { data } = await axios.get(`/api/v1/user/wishlist`, config);
+
+    dispatch({
+      type: GET_WISHLIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: GET_WISHLIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const removeProductFromWishlist = (productId) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: REMOVE_PRODUCT_FROM_WISHLIST_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        Authorization: userInfo.token,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/v1/user/wishlist/${productId}`,
+      {},
+      config
+    );
+
+    dispatch({
+      type: REMOVE_PRODUCT_FROM_WISHLIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: REMOVE_PRODUCT_FROM_WISHLIST_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

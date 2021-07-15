@@ -1,9 +1,9 @@
 import React from 'react';
 
-const SpinSVG = ({ size, color }) => {
+const SpinSVG = ({ size, color, className }) => {
   return (
     <svg
-      className={`animate-spin ${size} ${color}`}
+      className={`animate-spin ${size} ${color} ${className}`}
       xmlns='http://www.w3.org/2000/svg'
       fill='none'
       viewBox='0 0 24 24'
