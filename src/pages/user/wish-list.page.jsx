@@ -9,7 +9,7 @@ import {
 import { REMOVE_PRODUCT_FROM_WISHLIST_RESET } from '../../redux/reducers/user/user.types';
 
 import UserNav from '../../components/nav/user.nav.component';
-import SpinSVG from '../../components/spin-svg/spin-svg.component';
+import LoaderV2 from '../../components/loader/loader-v2.component.jsx';
 import WishlistProductCard from '../../components/cards/wishlist-product-card.component';
 import Notification from '../../components/notification/notification.component.jsx';
 import UserNavChildrenLayout from '../../components/nav/user.nav.children.layout.component';
@@ -67,13 +67,7 @@ const WishList = () => {
           <div className=''>
             <div className='max-w-7xl mx-auto py-12 text-center'>
               <div className='space-y-12'>
-                {loading && (
-                  <div className='mt-2 sm:mx-auto sm:w-full sm:max-w-md'>
-                    <div className='py-8 px-4 flex justify-center sm:px-10'>
-                      <SpinSVG size={'h-24 w-24'} color={'text-rose-500'} />
-                    </div>
-                  </div>
-                )}
+                {loading && <LoaderV2 size={'h-24 w-24'} color={'text-rose-500'} />}
                 {wishlist?.wishlist?.length <= 0 ? (
                   <div className='space-y-5 sm:mx-auto sm:max-w-xl sm:space-y-4 lg:max-w-5xl'>
                     <h2 className='text-3xl font-extrabold font-hind tracking-tight sm:text-4xl'>

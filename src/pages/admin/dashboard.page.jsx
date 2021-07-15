@@ -10,10 +10,10 @@ import {
 
 import UserNav from '../../components/nav/user.nav.component';
 import Order from '../../components/order/order.component';
-import SpinSVG from '../../components/spin-svg/spin-svg.component';
 import SelectBrandedSupport from '../../components/select/select-branded-with-support.component';
 import UserNavChildrenLayout from '../../components/nav/user.nav.children.layout.component';
 import Notification from '../../components/notification/notification.component.jsx';
+import LoaderV2 from '../../components/loader/loader-v2.component.jsx';
 
 import {
   ADMIN_NAVIGATION,
@@ -64,13 +64,7 @@ const AdminDashboard = () => {
         description={ADMIN_DASHBOARD_DESCRIPTION}
       >
         <UserNavChildrenLayout headline={ADMIN_DASHBOARD_HEADLINE}>
-          {loading && (
-            <div className='mt-2 sm:mx-auto sm:w-full sm:max-w-md'>
-              <div className='py-8 px-4 flex justify-center sm:px-10'>
-                <SpinSVG size={'h-24 w-24'} color={'text-rose-500'} />
-              </div>
-            </div>
-          )}
+          {loading && <LoaderV2 size={'h-24 w-24'} color={'text-rose-500'} />}
           {orders?.length <= 0 ? (
             <div className='py-24 sm:py-32'>
               <div className='max-w-md mx-auto pl-4 pr-8 sm:max-w-lg sm:px-6 lg:max-w-7xl lg:px-8 space-y-10'>

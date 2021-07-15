@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useDispatch } from 'react-redux';
@@ -8,34 +8,55 @@ import { auth } from './firebase/firebase';
 
 import { getCurrentUser } from './redux/reducers/user/user.actions';
 
-import Login from './pages/auth/login/login.page.jsx';
-import Register from './pages/auth/register/register.page.jsx';
-import FinishRegistration from './pages/auth/finish-registration/finish-registration.page.jsx';
-import Home from './pages/home/home.pages.jsx';
-import ForgotPassword from './pages/auth/forgot-password/forgot-password.page.jsx';
-import History from './pages/user/history.page.jsx';
-import Password from './pages/user/password.page.jsx';
-import WishList from './pages/user/wish-list.page.jsx';
-import AdminDashboard from './pages/admin/dashboard.page.jsx';
-import AdminCategory from './pages/admin/category/category.page.jsx';
-import AdminSubcategory from './pages/admin/subcategory/subcategory.page.jsx';
-import AdminProduct from './pages/admin/product/product.page.jsx';
-import Coupon from './pages/admin/coupon/coupon.page.jsx';
-import Product from './pages/product/product.page.jsx';
-import Category from './pages/category/category.page.jsx';
-import Subcategory from './pages/subcategory/subcategory.page.jsx';
-import ProductUpdate from './pages/admin/product-update/product-update.page.jsx';
-import AdminProducts from './pages/admin/products/products.page.jsx';
-import Products from './pages/products/products.page';
-import Cart from './pages/cart/cart.page';
-import Checkout from './pages/checkout/checkout.page';
-import Payment from './pages/payment/payment.page';
+import LoaderV2 from './components/loader/loader-v2.component.jsx';
 
-import Header from './components/header/header.component';
+const Login = lazy(() => import('./pages/auth/login/login.page.jsx'));
+const Register = lazy(() => import('./pages/auth/register/register.page.jsx'));
+const FinishRegistration = lazy(() =>
+  import('./pages/auth/finish-registration/finish-registration.page.jsx')
+);
+const Home = lazy(() => import('./pages/home/home.pages.jsx'));
+const ForgotPassword = lazy(() =>
+  import('./pages/auth/forgot-password/forgot-password.page.jsx')
+);
+const History = lazy(() => import('./pages/user/history.page.jsx'));
+const Password = lazy(() => import('./pages/user/password.page.jsx'));
+const WishList = lazy(() => import('./pages/user/wish-list.page.jsx'));
+const AdminDashboard = lazy(() => import('./pages/admin/dashboard.page.jsx'));
+const AdminCategory = lazy(() =>
+  import('./pages/admin/category/category.page.jsx')
+);
+const AdminSubcategory = lazy(() =>
+  import('./pages/admin/subcategory/subcategory.page.jsx')
+);
+const AdminProduct = lazy(() =>
+  import('./pages/admin/product/product.page.jsx')
+);
+const Coupon = lazy(() => import('./pages/admin/coupon/coupon.page.jsx'));
+const Product = lazy(() => import('./pages/product/product.page.jsx'));
+const Category = lazy(() => import('./pages/category/category.page.jsx'));
+const Subcategory = lazy(() =>
+  import('./pages/subcategory/subcategory.page.jsx')
+);
+const ProductUpdate = lazy(() =>
+  import('./pages/admin/product-update/product-update.page.jsx')
+);
+const AdminProducts = lazy(() =>
+  import('./pages/admin/products/products.page.jsx')
+);
+const Products = lazy(() => import('./pages/products/products.page'));
+const Cart = lazy(() => import('./pages/cart/cart.page'));
+const Checkout = lazy(() => import('./pages/checkout/checkout.page'));
+const Payment = lazy(() => import('./pages/payment/payment.page'));
 
-import UserRoute from './components/private-routes/user-routes.component';
-import AdminRoute from './components/private-routes/admin-routes.component';
-import Footer from './components/footer/footer.component.jsx';
+const Header = lazy(() => import('./components/header/header.component'));
+const UserRoute = lazy(() =>
+  import('./components/private-routes/user-routes.component')
+);
+const AdminRoute = lazy(() =>
+  import('./components/private-routes/admin-routes.component')
+);
+const Footer = lazy(() => import('./components/footer/footer.component.jsx'));
 
 const App = () => {
   const dispatch = useDispatch();
@@ -44,7 +65,7 @@ const App = () => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (user) {
         const idTokenResult = await user.getIdTokenResult();
-        console.log(idTokenResult)
+        console.log(idTokenResult);
         dispatch(getCurrentUser(idTokenResult.token));
       }
     });
@@ -53,7 +74,7 @@ const App = () => {
   }, [dispatch]);
 
   return (
-    <>
+    <Suspense fallback={<LoaderV2 size={'h-12 w-12'} color={'text-rose-500'} />}>
       <Header />
       <ToastContainer
         hideProgressBar
@@ -97,7 +118,7 @@ const App = () => {
         <AdminRoute exact path='/admin/products/add' component={AdminProduct} />
       </Switch>
       <Footer />
-    </>
+    </Suspense>
   );
 };
 
