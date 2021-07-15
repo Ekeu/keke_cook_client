@@ -40,6 +40,12 @@ const UserAddressCard = ({
   const handleDeleteAddress = (_id) => {
     dispatch(deleteAddress(_id));
   };
+
+  const handleSelectedAddress = () => {
+    setSelectedAddress(address);
+    localStorage.setItem('deliveryAddress', JSON.stringify(address));
+  };
+  
   return (
     <div className='inline-block relative px-4 sm:px-0'>
       <div
@@ -49,7 +55,7 @@ const UserAddressCard = ({
       >
         <div
           className='flex-1 bg-white p-6 flex flex-col justify-between cursor-pointer'
-          onClick={() => setSelectedAddress(address)}
+          onClick={handleSelectedAddress}
         >
           <div className='flex-1'>
             <p className='text-md uppercase font-semibold font-hind text-blue-gray-800'>

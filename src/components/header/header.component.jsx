@@ -82,7 +82,7 @@ const Header = () => {
                     to={'/cart'}
                     className='inline-block relative flex-shrink-0 bg-white p-1 text-blue-gray-400 rounded-full hover:text-blue-gray-500'
                   >
-                    <span className='sr-only'>votre Panier</span>
+                    <span className='sr-only'>Votre Panier</span>
                     <ShoppingCartIcon className='h-6 w-6' aria-hidden='true' />
                     {cartProducts.length > 0 && (
                       <span className='absolute top-0 right-0 h-4 w-4 rounded-full ring-2 ring-white bg-rose-500 flex justify-center text-white items-center text-xs font-poppins'>
@@ -134,19 +134,34 @@ const Header = () => {
                                 </Menu.Item>
                               )}
                               {userInfo?.role === 'admin' && (
-                                <Menu.Item>
-                                  {({ active }) => (
-                                    <Link
-                                      to={'/admin/dashboard'}
-                                      className={classNames(
-                                        active ? 'bg-blue-gray-100' : '',
-                                        'block capitalize px-4 py-2 text-sm text-blue-gray-700'
-                                      )}
-                                    >
-                                      Dashboard
-                                    </Link>
-                                  )}
-                                </Menu.Item>
+                                <>
+                                  <Menu.Item>
+                                    {({ active }) => (
+                                      <Link
+                                        to={'/me/account'}
+                                        className={classNames(
+                                          active ? 'bg-blue-gray-100' : '',
+                                          'block capitalize px-4 py-2 text-sm text-blue-gray-700'
+                                        )}
+                                      >
+                                        Mon Compte
+                                      </Link>
+                                    )}
+                                  </Menu.Item>
+                                  <Menu.Item>
+                                    {({ active }) => (
+                                      <Link
+                                        to={'/admin/dashboard'}
+                                        className={classNames(
+                                          active ? 'bg-blue-gray-100' : '',
+                                          'block capitalize px-4 py-2 text-sm text-blue-gray-700'
+                                        )}
+                                      >
+                                        Compte Admin
+                                      </Link>
+                                    )}
+                                  </Menu.Item>
+                                </>
                               )}
                               <Menu.Item>
                                 <CustomLink
@@ -174,6 +189,58 @@ const Header = () => {
                 </div>
               </div>
             </div>
+            <Disclosure.Panel className='lg:hidden'>
+              <div className='pt-2 pb-3 space-y-1 capitalize'>
+                {MENU_HEADER_LINKS.map((link) => {
+                  const { id, text, url } = link;
+                  return (
+                    <CustomLink key={id} url={url} type='mobile'>
+                      {text}
+                    </CustomLink>
+                  );
+                })}
+              </div>
+              <div className='pt-4 pb-3 border-t border-gray-200'>
+                <div className='flex items-center px-4'>
+                  <div className='flex-shrink-0'>
+                    <img
+                      className='h-10 w-10 rounded-full'
+                      src={userInfo?.photoURL}
+                      alt={userInfo?.displayName}
+                    />
+                  </div>
+                  <div className='ml-3'>
+                    <div className='text-base font-medium text-gray-800'>
+                      {userInfo?.displayName}
+                    </div>
+                    <div className='text-sm font-medium text-gray-500'>
+                      {userInfo?.email}
+                    </div>
+                  </div>
+                  <Link
+                    to={'/cart'}
+                    className='ml-auto flex-shrink-0 bg-white p-1 text-blue-gray-400 rounded-full hover:text-blue-gray-500'
+                  >
+                    <span className='sr-only'>Votre Panier</span>
+                    <ShoppingCartIcon className='h-6 w-6' aria-hidden='true' />
+                    {cartProducts.length > 0 && (
+                      <span className='absolute top-60 right-3 h-4 w-4 rounded-full ring-2 ring-white bg-rose-500 flex justify-center text-white items-center text-xs font-poppins'>
+                        {cartProducts.length}
+                      </span>
+                    )}
+                  </Link>
+                </div>
+                <div className='mt-3 space-y-1'>
+                  <CustomLink
+                    type='button'
+                    role='menuitem'
+                    onClick={logoutHandler}
+                  >
+                    Déconnexion
+                  </CustomLink>
+                </div>
+              </div>
+            </Disclosure.Panel>
           </>
         </>
       )}

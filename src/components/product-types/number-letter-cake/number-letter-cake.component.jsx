@@ -115,9 +115,9 @@ const NumberLetterCake = ({
           name='numberOfFlavors'
           type='number'
           label='numberOfFlavors'
-          labelText='Nombres de Lettres ou Chiffres'
+          labelText='Nombres de Parfums'
           register={register('numberOfFlavors', {
-            required: 'Entrez le nombre de lettre ou de chiffres',
+            required: 'Entrez le nombre de parfums',
             max: {
               value: 2,
               message: 'Le nombre ne doit pas être supérieur à 2',

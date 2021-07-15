@@ -1,11 +1,11 @@
 import React from 'react';
 
-const TableData = ({ headers, action, children }) => {
+const TableData = ({ headers, action, children, containerStyles }) => {
   return (
-    <div className='flex flex-col mt-6'>
+    <div className={`flex flex-col mt-5 ${containerStyles}`}>
       <div className='-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8'>
         <div className='py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8'>
-          <div className='shadow overflow-hidden border-b border-blue-gray-200 sm:rounded-lg'>
+          <div className='shadow-sm overflow-hidden border-b border-blue-gray-100 sm:rounded-lg'>
             <table className='min-w-full divide-y divide-gray-200 font-hind'>
               <thead className='bg-blue-gray-50'>
                 <tr>

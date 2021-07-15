@@ -30,6 +30,18 @@ import {
   REMOVE_COUPON_SUCCESS,
   REMOVE_COUPON_FAIL,
   REMOVE_COUPON_RESET,
+  ADD_PRODUCT_TO_WISHLIST_REQUEST,
+  ADD_PRODUCT_TO_WISHLIST_SUCCESS,
+  ADD_PRODUCT_TO_WISHLIST_FAIL,
+  ADD_PRODUCT_TO_WISHLIST_RESET,
+  GET_WISHLIST_REQUEST,
+  GET_WISHLIST_SUCCESS,
+  GET_WISHLIST_FAIL,
+  GET_WISHLIST_RESET,
+  REMOVE_PRODUCT_FROM_WISHLIST_REQUEST,
+  REMOVE_PRODUCT_FROM_WISHLIST_SUCCESS,
+  REMOVE_PRODUCT_FROM_WISHLIST_FAIL,
+  REMOVE_PRODUCT_FROM_WISHLIST_RESET,
 } from './user.types';
 
 export const userLoginReducer = (state = {}, action) => {
@@ -152,6 +164,54 @@ export const removeUserCouponReducer = (state = {}, action) => {
     case REMOVE_COUPON_FAIL:
       return { loading: false, error: action.payload };
     case REMOVE_COUPON_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const addToWishlistReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ADD_PRODUCT_TO_WISHLIST_REQUEST:
+      return { ...state, loading: true };
+    case ADD_PRODUCT_TO_WISHLIST_SUCCESS:
+      return { loading: false, success: true };
+    case ADD_PRODUCT_TO_WISHLIST_FAIL:
+      return { loading: false, error: action.payload };
+    case ADD_PRODUCT_TO_WISHLIST_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const wishlistListReducer = (state = { wishlist: [] }, action) => {
+  switch (action.type) {
+    case GET_WISHLIST_REQUEST:
+      return { loading: true, wishlist: [] };
+    case GET_WISHLIST_SUCCESS:
+      return {
+        loading: false,
+        wishlist: action.payload,
+      };
+    case GET_WISHLIST_FAIL:
+      return { loading: false, error: action.payload };
+    case GET_WISHLIST_RESET:
+      return { wishlist: [] };
+    default:
+      return state;
+  }
+};
+
+export const removeFromWishlistReducer = (state = {}, action) => {
+  switch (action.type) {
+    case REMOVE_PRODUCT_FROM_WISHLIST_REQUEST:
+      return { ...state, loading: true };
+    case REMOVE_PRODUCT_FROM_WISHLIST_SUCCESS:
+      return { loading: false, success: true };
+    case REMOVE_PRODUCT_FROM_WISHLIST_FAIL:
+      return { loading: false, error: action.payload };
+    case REMOVE_PRODUCT_FROM_WISHLIST_RESET:
       return {};
     default:
       return state;
