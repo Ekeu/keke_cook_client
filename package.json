@@ -2,6 +2,10 @@
   "name": "keke_cook_client",
   "proxy": "https://keke-cook-server.herokuapp.com",
   "version": "0.1.0",
+  "engines": {
+    "node": ">=14.15.5",
+    "npm": "7.17.0"
+  },
   "private": true,
   "dependencies": {
     "@algolia/autocomplete-js": "^1.1.0",
