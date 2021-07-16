@@ -3,7 +3,7 @@
   "proxy": "https://keke-cook-server.herokuapp.com",
   "version": "0.1.0",
   "engines": {
-    "node": ">=14.15.5",
+    "node": "14.15.5",
     "npm": "7.17.0"
   },
   "private": true,
