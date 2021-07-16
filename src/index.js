@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import './index.css';
-import '@algolia/autocomplete-theme-classic';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import 'react-datepicker/dist/react-datepicker.css';
