@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import algoliasearch from 'algoliasearch/lite';
 import { AdjustmentsIcon } from '@heroicons/react/outline';
 import {
@@ -10,6 +11,8 @@ import {
   PoweredBy,
   Configure,
 } from 'react-instantsearch-dom';
+
+import { PRODUCT_DETAILS_RESET } from '../../redux/reducers/product/product.types'
 
 import AlgoliaCustomHits from '../../components/algolia-custom-hits/algolia-custom-hits.component';
 import AlgoliaRefinementList from '../../components/algolia-refinement-list/algolia-refinement-list.component';
@@ -27,8 +30,15 @@ const searchClient = algoliasearch(
 );
 
 const Products = () => {
+
+  const dispatch = useDispatch();
+
   const [openFilters, setOpenFilters] = useState(false);
   const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    dispatch({type: PRODUCT_DETAILS_RESET})
+  }, [dispatch])
 
   return (
     <div className='relative'>
