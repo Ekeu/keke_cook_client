@@ -1,6 +1,6 @@
 {
   "name": "keke_cook_client",
-  "proxy": "http://127.0.0.1:5000",
+  "proxy": "http://206.189.53.119",
   "version": "0.1.0",
   "engines": {
     "node": "14.15.5",
