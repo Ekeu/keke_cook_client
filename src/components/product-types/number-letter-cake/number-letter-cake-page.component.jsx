@@ -93,23 +93,29 @@ const NumberLetterCakePage = ({
             label={'Crème'}
           />
         </div>
-        <div className='col-span-5'>
-          <label className='mb-1 flex justify-between text-sm font-medium text-blue-gray-700 font-hind'>
-            Toppings <span className='text-xs text-blue-gray-500'> 2 à 3 toppings</span>
-          </label>
-          <MultiSelect
-            options={numberLetterCakeToppings}
-            value={numberLetterCakeSelectedToppings}
-            hasSelectAll={false}
-            overrideStrings={overrideStrings}
-            onChange={setNumberLetterCakeSelectedToppings}
-            ArrowRenderer={ArrowRenderer}
-            ClearIcon={ClearIcon}
-            ClearSelectedIcon={ClearSelectedIcon}
-            labelledBy='Toppings'
-            className='text-sm font-hind'
-          />
-        </div>
+        {numberLetterCakeToppings?.length > 0 && (
+          <div className='col-span-5'>
+            <label className='mb-1 flex justify-between text-sm font-medium text-blue-gray-700 font-hind'>
+              Toppings{' '}
+              <span className='text-xs text-blue-gray-500'>
+                {' '}
+                2 à 3 toppings
+              </span>
+            </label>
+            <MultiSelect
+              options={numberLetterCakeToppings}
+              value={numberLetterCakeSelectedToppings}
+              hasSelectAll={false}
+              overrideStrings={overrideStrings}
+              onChange={setNumberLetterCakeSelectedToppings}
+              ArrowRenderer={ArrowRenderer}
+              ClearIcon={ClearIcon}
+              ClearSelectedIcon={ClearSelectedIcon}
+              labelledBy='Toppings'
+              className='text-sm font-hind'
+            />
+          </div>
+        )}
       </div>
       {Number(numberOfFlavors) >= 2 && (
         <div className='grid grid-cols-12 gap-x-10 gap-y-8 pt-5 border-t-2 border-blue-gray-100 mt-6'>
@@ -131,7 +137,11 @@ const NumberLetterCakePage = ({
           </div>
           <div className='col-span-5'>
             <label className='mb-1 flex justify-between text-sm font-medium text-blue-gray-700 font-hind'>
-            Toppings <span className='text-xs text-blue-gray-500'> 2 à 3 toppings</span>
+              Toppings{' '}
+              <span className='text-xs text-blue-gray-500'>
+                {' '}
+                2 à 3 toppings
+              </span>
             </label>
             <MultiSelect
               options={numberLetterCakeToppings2}
